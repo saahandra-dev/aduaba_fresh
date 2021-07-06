@@ -1,10 +1,10 @@
 import 'package:aduaba_fresh/views/create_account.dart';
 import 'package:aduaba_fresh/views/forgot_password.dart';
 import 'package:aduaba_fresh/views/homepage.dart';
-import 'package:aduaba_fresh/widgets/reusableButton_img.dart';
-import 'package:aduaba_fresh/widgets/reusableButton_noImg.dart';
-import 'package:aduaba_fresh/widgets/reusableTextFormField.dart';
-import 'package:aduaba_fresh/widgets/textFormFieldLabel.dart';
+import 'package:aduaba_fresh/widgets/reusable_button_img.dart';
+import 'package:aduaba_fresh/widgets/reusable_button_no_img.dart';
+import 'package:aduaba_fresh/widgets/reusable_form_field.dart';
+import 'package:aduaba_fresh/widgets/form_field_label.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
@@ -15,6 +15,7 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +41,7 @@ class _SignInState extends State<SignIn> {
                         width: 50.0,
                         height: 50.0,
                         decoration: BoxDecoration(
-                          color: Color(0XFFF7F7F7),
+                          color: Color(0XFF3A953C).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(100.0)
                         ),
                         child: Icon(
@@ -62,6 +63,9 @@ class _SignInState extends State<SignIn> {
                     SizedBox(height: 24.0,),
                     ReusableTextFormField(
                       hintText: 'Enter Email',
+                      validator: (val) => val.isEmpty || !val.contains('@') || !val.contains('.')
+                      ? 'Enter a valid email'
+                      : null
                     ),
                     SizedBox(height: 24.0,),
                     TextFormFieldLabel(

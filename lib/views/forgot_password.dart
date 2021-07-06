@@ -1,6 +1,7 @@
-import 'package:aduaba_fresh/widgets/email_bottomSheet.dart';
-import 'package:aduaba_fresh/widgets/reusableButton_noImg.dart';
-import 'package:aduaba_fresh/widgets/sms_bottomSheet.dart';
+import 'package:aduaba_fresh/views/sign_in.dart';
+import 'package:aduaba_fresh/widgets/email_bottomsheet.dart';
+import 'package:aduaba_fresh/widgets/reusable_button_no_img.dart';
+import 'package:aduaba_fresh/widgets/sms_bottomsheet.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPassword extends StatefulWidget {
@@ -37,7 +38,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           width: 50.0,
                           height: 50.0,
                           decoration: BoxDecoration(
-                            color: Color(0XFFF7F7F7),
+                            color: Color(0XFF3A953C).withOpacity(0.1),
                             borderRadius: BorderRadius.circular(100.0)
                           ),
                           child: Image.asset(
@@ -66,23 +67,35 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     GestureDetector(
                       onTap: () => showModalBottomSheet(
                         context: context, 
-                        builder: (context) => bottomSheetSMS()
+                        builder: (context) => ViaSMS()
                       ),
                       child: ListTile(
                         leading: Container(
-                            width: 50.0,
-                            height: 50.0,
+                            width: 44.0,
+                            height: 44.0,
                             decoration: BoxDecoration(
-                              color: Color(0XFFF7F7F7),
-                              borderRadius: BorderRadius.circular(100.0)
+                              color: Color(0XFFE6F6EE),
+                              borderRadius: BorderRadius.circular(8.0)
                             ),
                             child: Icon(
                               Icons.phone_iphone_outlined,
                               color: Colors.green,
                             )
                           ),
-                          title: Text('via sms:'),
-                          subtitle: Text('••• ••••  7767'),
+                          title: Text('via sms:',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF10151A)
+                          ),
+                          ),
+                          subtitle: Text('••• ••••  7767',
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFF999999)
+                          ),
+                          ),
                           trailing: Radio(
                             value: 1, 
                             groupValue: _value, 
@@ -97,23 +110,35 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     GestureDetector(
                       onTap: () => showModalBottomSheet(
                         context: context, 
-                        builder: (context) => bottomSheetEmail()
+                        builder: (context) => ResetPassword()
                       ),
                       child: ListTile(
                         leading: Container(
-                            width: 50.0,
-                            height: 50.0,
+                            width: 44.0,
+                            height: 44.0,
                             decoration: BoxDecoration(
-                              color: Color(0XFFF7F7F7),
-                              borderRadius: BorderRadius.circular(100.0)
+                              color: Color(0XFFE6F6EE),
+                              borderRadius: BorderRadius.circular(8.0)
                             ),
                             child: Icon(
                               Icons.email_sharp,
                               color: Colors.green,
                             )
                           ),
-                          title: Text('via email:'),
-                          subtitle: Text('•••••••vid@gmail.com'),
+                          title: Text('via email:',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF10151A)
+                          ),
+                          ),
+                          subtitle: Text('•••••••vid@gmail.com',
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFF999999)
+                          ),
+                          ),
                           trailing: Radio(
                             value: 2, 
                             groupValue: _value, 
@@ -125,7 +150,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     ),
                   ],),),
                   ReusableButtonNoImg(
-                  onpressed: () {},
+                  onpressed: () {
+                    Navigator.pushNamed(context, SignIn.id);
+                  },
                   text: 'Continue',
                   primary: Color(0XFF3A953C),
                   fontweight: FontWeight.w700,

@@ -1,9 +1,11 @@
-import 'package:aduaba_fresh/models/best_selling_model.dart';
+import 'package:aduaba_fresh/views/account_details.dart';
 import 'package:aduaba_fresh/views/categories.dart';
+import 'package:aduaba_fresh/views/homepage.dart';
 import 'package:aduaba_fresh/widgets/homepage_widgets/best_selling_widget.dart';
-import 'package:aduaba_fresh/widgets/homepage_widgets/today_promo_stack.dart';
+import 'package:aduaba_fresh/widgets/reusable_button_no_img.dart';
 import 'package:aduaba_fresh/widgets/reusable_search_field.dart';
-import 'package:aduaba_fresh/widgets/textFormFieldLabel.dart';
+import 'package:aduaba_fresh/widgets/form_field_label.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter/material.dart';
 
 class SelectedCategory extends StatefulWidget {
@@ -18,6 +20,45 @@ class _SelectedCategoryState extends State<SelectedCategory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+          iconSize: 35,
+          selectedItemColor: Colors.green,
+          unselectedItemColor: Color(0xFFDEDEDE),
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          items: [
+            BottomNavigationBarItem(
+              label: 'home',
+              icon: InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, HomePage.id);
+                },
+                child: Icon(Icons.home))
+              ),
+              BottomNavigationBarItem(
+              label: 'search',
+              icon: InkWell(
+                onTap: () {
+                  // Navigator.pushNamed(context, AccountDetails.id);
+                },
+                child: Icon(Icons.search))
+              ),
+              BottomNavigationBarItem(
+              label: 'option',
+              icon: InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, AccountDetails.id);
+                },
+                child: Icon(Icons.more_horiz))
+              ),
+          ],
+          // currentIndex: selectedIndex,
+          // onTap: _onItemTapped,
+
+          
+        ),
+
+
       body: Column(children: [
         Padding(
             padding: EdgeInsets.fromLTRB(24.0, 46.0, 24.0, 0.0),
@@ -63,12 +104,43 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                     ),
                     Row(
                       children: [
-                        Text('Sort',
-                        style: TextStyle(
-                          fontSize: 13.0,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFF3E3E3E)
-                        )
+                        GestureDetector(
+                          onTap: () => showModalBottomSheet(
+                            context: context, 
+                            builder: (context) => Container(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+                                child: Column(children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Sort by',
+                                      style: TextStyle(
+                                        fontSize: 24.0,
+                                        fontWeight: FontWeight.w700,
+                                        color: Color(0xFF3C673D)
+                                      ),
+                                      ),
+                                      Icon(Icons.close)
+                                    ],
+                                  ),
+                                  Spacer(),
+                                  ReusableButtonNoImg(
+                                    text: 'Apply',
+                                    primary: Color(0xFF3A953C),
+                                    onpressed: () {},
+                                  )
+                                ],),
+                              ),
+                            )
+                          ),
+                          child: Text('Sort',
+                          style: TextStyle(
+                            fontSize: 13.0,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFF3E3E3E)
+                          )
+                          ),
                         ),
                         SizedBox(width: 20.0,),
                         Image.asset('assets/images/divider.png'),
@@ -168,7 +240,33 @@ class FilterBottomSheet extends StatelessWidget {
               color: Color(0xFF10151A),
               text: 'Sub category',
             ),
-            
+            Container(
+              height: MediaQuery.of(context).size.width * 0.5,
+              child: StaggeredGridView.countBuilder(
+                itemCount: 8,
+                crossAxisCount: 8,
+                staggeredTileBuilder: (index) => StaggeredTile.count(4, 1),
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    horizontalTitleGap: 0,
+                    leading: Checkbox(
+                      value: false,
+                      onChanged: (value) {},
+                    ),
+                    title: Text('Granular Fruits'),
+                    contentPadding: EdgeInsets.all(0)
+                    );
+                  }),
+                ),
+                TextFormFieldLabel(
+                  color: Color(0xFF10151A),
+                  text: 'Price Range',
+                ),
+                ReusableButtonNoImg(
+                  text: 'Apply Filter',
+                  primary: Color(0xFF3A953C),
+                  onpressed: () {},
+                )
           ],),
         )
       ),

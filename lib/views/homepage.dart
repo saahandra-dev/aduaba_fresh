@@ -1,4 +1,5 @@
 import 'package:aduaba_fresh/views/account_details.dart';
+import 'package:aduaba_fresh/views/categories.dart';
 import 'package:aduaba_fresh/views/sign_in.dart';
 import 'package:aduaba_fresh/widgets/homepage_widgets/categories.dart';
 import 'package:aduaba_fresh/widgets/homepage_widgets/drawer.dart';
@@ -79,30 +80,36 @@ class _HomePageState extends State<HomePage> {
               label: 'home',
               icon: InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, SignIn.id);
+                  Navigator.pushNamed(context, HomePage.id);
                 },
-                child: Icon(Icons.home))
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 50.0),
+                  child: Icon(Icons.home_outlined),
+                ))
               ),
               BottomNavigationBarItem(
               label: 'search',
               icon: InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, AccountDetails.id);
+                  // Navigator.pushNamed(context, AccountDetails.id);
                 },
                 child: Icon(Icons.search))
               ),
               BottomNavigationBarItem(
               label: 'option',
               icon: InkWell(
-
-                child: Icon(Icons.more_horiz))
+                onTap: () {
+                  Navigator.pushNamed(context, AccountDetails.id);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 50.0),
+                  child: Icon(Icons.more_horiz),
+                ))
               ),
               
           ],
           currentIndex: selectedIndex,
           onTap: _onItemTapped,
-
-          
         ),
 
 
@@ -138,7 +145,10 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: 32.0,),
 
               ProductSectionHeadings(
-                title: 'Categories'
+                title: 'Categories',
+                onTap: () {
+                  Navigator.pushNamed(context, Categories.id);
+                },
               ),
 
               SizedBox(height: 16.0,),

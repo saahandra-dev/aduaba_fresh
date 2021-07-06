@@ -3,7 +3,7 @@
 import 'package:aduaba_fresh/models/onboarding_model.dart';
 import 'package:aduaba_fresh/views/create_account.dart';
 import 'package:aduaba_fresh/views/sign_in.dart';
-import 'package:aduaba_fresh/widgets/reusableButton_noImg.dart';
+import 'package:aduaba_fresh/widgets/reusable_button_no_img.dart';
 import 'package:flutter/material.dart';
 
 class Onboarding extends StatefulWidget {

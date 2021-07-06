@@ -1,8 +1,8 @@
 import 'package:aduaba_fresh/views/sign_in.dart';
-import 'package:aduaba_fresh/widgets/reusableButton_img.dart';
-import 'package:aduaba_fresh/widgets/reusableButton_noImg.dart';
-import 'package:aduaba_fresh/widgets/reusableTextFormField.dart';
-import 'package:aduaba_fresh/widgets/textFormFieldLabel.dart';
+import 'package:aduaba_fresh/widgets/reusable_button_img.dart';
+import 'package:aduaba_fresh/widgets/reusable_button_no_img.dart';
+import 'package:aduaba_fresh/widgets/reusable_form_field.dart';
+import 'package:aduaba_fresh/widgets/form_field_label.dart';
 import 'package:flutter/material.dart';
 
 class CreateAccount extends StatefulWidget {
@@ -39,7 +39,7 @@ class _CreateAccountState extends State<CreateAccount> {
                             width: 50.0,
                             height: 50.0,
                             decoration: BoxDecoration(
-                              color: Color(0XFFF7F7F7),
+                              color: Color(0XFF3A953C).withOpacity(0.1),
                               borderRadius: BorderRadius.circular(100.0)
                             ),
                             child: Icon(

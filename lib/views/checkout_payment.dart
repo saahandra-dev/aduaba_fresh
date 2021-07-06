@@ -1,7 +1,7 @@
-import 'package:aduaba_fresh/widgets/reusableButton_noImg.dart';
-import 'package:aduaba_fresh/widgets/reusableTextFormField.dart';
+import 'package:aduaba_fresh/widgets/reusable_button_no_img.dart';
+import 'package:aduaba_fresh/widgets/reusable_form_field.dart';
 import 'package:aduaba_fresh/widgets/reusable_box_header.dart';
-import 'package:aduaba_fresh/widgets/textFormFieldLabel.dart';
+import 'package:aduaba_fresh/widgets/form_field_label.dart';
 import 'package:flutter/material.dart';
 
 class CheckoutPayment extends StatefulWidget {

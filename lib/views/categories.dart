@@ -1,16 +1,57 @@
+import 'package:aduaba_fresh/views/account_details.dart';
 import 'package:aduaba_fresh/views/homepage.dart';
 import 'package:aduaba_fresh/views/selected_category.dart';
 import 'package:aduaba_fresh/widgets/reusable_page_title.dart';
 import 'package:flutter/material.dart';
 
+
+
 class Categories extends StatelessWidget {
   const Categories({ Key key}) : super(key: key);
   static String id = 'categories';
 
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+      bottomNavigationBar: BottomNavigationBar(
+          iconSize: 35,
+          selectedItemColor: Colors.green,
+          unselectedItemColor: Color(0xFFDEDEDE),
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          items: [
+            BottomNavigationBarItem(
+              label: 'home',
+              icon: InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, HomePage.id);
+                },
+                child: Icon(Icons.home))
+              ),
+              BottomNavigationBarItem(
+              label: 'search',
+              icon: InkWell(
+                onTap: () {
+                  // Navigator.pushNamed(context, AccountDetails.id);
+                },
+                child: Icon(Icons.search))
+              ),
+              BottomNavigationBarItem(
+              label: 'option',
+              icon: InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, AccountDetails.id);
+                },
+                child: Icon(Icons.more_horiz))
+              ),
+          ],
+          // currentIndex: selectedIndex,
+          // onTap: _onItemTapped,
+
+          
+        ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
