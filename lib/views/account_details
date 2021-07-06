@@ -175,4 +175,3 @@ class UserContactDetails extends StatelessWidget {
   }
 }
 
-
