@@ -83,7 +83,9 @@ class _PaymentCardState extends State<PaymentCard> {
                 itemBuilder: (context, index) {
                   return Container(
                     child: Row(children: [
-                      Image.asset('assets/images/visa_card.png'),
+                      CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        child: Image.asset('assets/images/visa.png')),
                       SizedBox(width: 23.57,),
                       Text('1009 •••• •••• 2017'),
                       Spacer(),

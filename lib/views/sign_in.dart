@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:aduaba_fresh/views/create_account.dart';
 import 'package:aduaba_fresh/views/forgot_password.dart';
 import 'package:aduaba_fresh/views/homepage.dart';
@@ -6,6 +8,7 @@ import 'package:aduaba_fresh/widgets/reusable_button_no_img.dart';
 import 'package:aduaba_fresh/widgets/reusable_form_field.dart';
 import 'package:aduaba_fresh/widgets/form_field_label.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class SignIn extends StatefulWidget {
   static String id = 'sign_in.dart';
@@ -14,7 +17,39 @@ class SignIn extends StatefulWidget {
   _SignInState createState() => _SignInState();
 }
 
+
 class _SignInState extends State<SignIn> {
+
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
+
+  Future<void> login() async {
+  if (passwordController.text.isNotEmpty && emailController.text.isNotEmpty) {
+    var response = await http.post(Uri.parse("https://teamaduaba.azurewebsites.net/login"), 
+        body: jsonEncode({
+          'email': emailController.text, 
+          'password': passwordController.text
+          }),
+          headers: {
+          "Login":"application/json",
+          "Content-Type":"application/json"
+        }
+          );
+          if(response.statusCode == 200) {
+            Navigator.pushNamed(context, HomePage.id);
+          } else {
+            // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid Credentials")));
+            print(response.body);
+          }
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 
+    Padding(
+      padding: const EdgeInsets.only(left: 30.0),
+      child: Text("Fields cannot be blank"),
+    )));
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +97,7 @@ class _SignInState extends State<SignIn> {
                     ),
                     SizedBox(height: 24.0,),
                     ReusableTextFormField(
+                      controller: emailController,
                       hintText: 'Enter Email',
                       validator: (val) => val.isEmpty || !val.contains('@') || !val.contains('.')
                       ? 'Enter a valid email'
@@ -73,7 +109,16 @@ class _SignInState extends State<SignIn> {
                     ),
                     SizedBox(height: 24.0,),
                     ReusableTextFormField(
-                      hintText: 'Enter Password',
+                      controller: passwordController,
+                      hintText: 'Enter password',
+                      validator:  (value) {
+                        String  pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+                        RegExp regExp = new RegExp(pattern);
+          
+                        if (regExp.hasMatch(value)) {
+                          return 'must contain a special character, lower and uppercase and not be less than 8 characters';
+                        }
+                      },
                     ),
                     SizedBox(height: 24.0,),
                   ],),
@@ -96,7 +141,8 @@ class _SignInState extends State<SignIn> {
                 ReusableButtonNoImg(
                   text: 'Login',
                   onpressed: () {
-                    Navigator.pushNamed(context, HomePage.id);
+                    login();
+                    // Navigator.pushNamed(context, HomePage.id);
                   },
                   primary: Color(0XFF3A953C),
                   fontweight: FontWeight.w700,

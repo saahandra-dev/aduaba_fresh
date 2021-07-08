@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ReusableTextFormField extends StatelessWidget {
    ReusableTextFormField({
-     this.hintText, this.validator, this.obscureText, this.controller, this.suffixIcon
+     this.hintText, this.validator, this.obscureText, this.controller, this.suffixIcon, this.onSaved, this.key
   });
 
   final String hintText;
@@ -10,14 +10,17 @@ class ReusableTextFormField extends StatelessWidget {
   final bool obscureText;
   final TextEditingController controller;
   final Widget suffixIcon;
+  final Function onSaved;
+  final Key key;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 47.0,
       child: TextFormField(
-        
+        key: key,
         controller: controller,
+        onSaved: onSaved,
         validator: validator,
         obscureText: hintText.contains('password') ? true : false,
         decoration: InputDecoration(

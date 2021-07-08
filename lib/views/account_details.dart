@@ -16,111 +16,110 @@ class AccountDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(24.0, 0.0, 24.0, 45.0),
-        child: Column(children: [
-          ReusableBoxHeader(
-            text: 'Account',
-            onTap: () {
-              Navigator.pushNamed(context, HomePage.id);
-            },
-          ),
-          Expanded(
-          child: Container(
-          // color: Color(0XFFF5F5F5),
+      body: Container(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(24.0, 0.0, 24.0, 45.0),
           child: Column(children: [
-            SizedBox(height: 48.0,),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-              Container(
-                height: 60.0,
-                width: 60.0,
-                child: CircleAvatar(
-                  // backgroundColor: Colors.yellow,
-                  child: Image.asset('assets/images/acc_profile.png'),
-                )
-                ),
-                SizedBox(width: 16.0,),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                  UserName(
-                    text: 'Andrea Charles',
-                  ),
-                  SizedBox(height: 8.0,),
-                  UserContactDetails(
-                    text: 'Andrea_charles@gmail.com',
-                  ),
-                  SizedBox(height: 8.0,),
-                  UserContactDetails(
-                    text: '+234 809 202 3024',
+            ReusableBoxHeader(
+              text: 'Account',
+              onTap: () {
+                Navigator.pushNamed(context, HomePage.id);
+              },
+            ),
+            Expanded(
+            child: Container(
+            // color: Color(0XFFF5F5F5),
+            child: Column(children: [
+              SizedBox(height: 48.0,),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                Container(
+                  height: 60.0,
+                  width: 60.0,
+                  child: CircleAvatar(
+                    // backgroundColor: Colors.yellow,
+                    child: Image.asset('assets/images/acc_profile.png'),
                   )
-                ],),
-                SizedBox(width: 71.0,),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, EditUserProfile.id);
-                  },
-                  child: Image.asset('assets/images/edit_account.png'))
+                  ),
+                  SizedBox(width: 16.0,),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                    UserName(
+                      text: 'Andrea Charles',
+                    ),
+                    SizedBox(height: 8.0,),
+                    UserContactDetails(
+                      text: 'Andrea_charles@gmail.com',
+                    ),
+                    SizedBox(height: 8.0,),
+                    UserContactDetails(
+                      text: '+234 809 202 3024',
+                    )
+                  ],),
+                  SizedBox(width: 71.0,),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, EditUserProfile.id);
+                    },
+                    child: Image.asset('assets/images/edit_account.png'))
+              ],),
+              SizedBox(height: 53.0,),
+              UserProfileLink(
+                image: 'assets/images/acc_heart_icon.png',
+                text: 'My wishlist',
+                onTap: () {
+                  Navigator.pushNamed(context, WishList.id);
+                },
+              ),
+              UserProfileLink(
+                image: 'assets/images/acc_cart_icon.png',
+                text: 'My orders',
+                onTap: () {
+                  Navigator.pushNamed(context, Orders.id);
+                },
+              ),
+              UserProfileLink(
+                image: 'assets/images/card_payment.png',
+                text: 'Payment',
+                onTap: () {
+                  Navigator.pushNamed(context, PaymentCard.id);
+                },
+              ),
+              UserProfileLink(
+                image: 'assets/images/shipping_icon.png',
+                text: 'Shipping details',
+                onTap: () {
+                  Navigator.pushNamed(context, ShippingDetails.id);
+                },
+              ),
+              UserProfileLink(
+                image: 'assets/images/acc_setting_icon.png',
+                text: 'Settings',
+                onTap: () {},
+              ),
+              Spacer(),
+              ReusableButtonNoImg(
+                text: 'Log-Out',
+                primary: Color(0xFFBB2F48),
+                color: Colors.white,
+                onpressed: () {},
+              ),
             ],),
-            SizedBox(height: 53.0,),
-            UserProfileLink(
-              image: 'assets/images/acc_heart_icon.png',
-              text: 'My wishlist',
-              onTap: () {
-                Navigator.pushNamed(context, WishList.id);
-              },
             ),
-            UserProfileLink(
-              image: 'assets/images/acc_cart_icon.png',
-              text: 'My orders',
-              onTap: () {
-                Navigator.pushNamed(context, Orders.id);
-              },
-            ),
-            UserProfileLink(
-              image: 'assets/images/card_payment.png',
-              text: 'Payment',
-              onTap: () {
-                Navigator.pushNamed(context, PaymentCard.id);
-              },
-            ),
-            UserProfileLink(
-              image: 'assets/images/shipping_icon.png',
-              text: 'Shipping details',
-              onTap: () {
-                Navigator.pushNamed(context, ShippingDetails.id);
-              },
-            ),
-            UserProfileLink(
-              image: 'assets/images/acc_setting_icon.png',
-              text: 'Settings',
-              onTap: () {},
-            ),
-            Spacer(),
-            ReusableButtonNoImg(
-              text: 'Log-Out',
-              primary: Color(0xFFBB2F48),
-              color: Colors.white,
-              onpressed: () {},
-            ),
-          ],),
           ),
+          ]),
         ),
-  
-        ]),
       )
       );
   }
 }
 
-
-
 class UserProfileLink extends StatelessWidget {
   UserProfileLink({this.image, this.text, this.onTap});
-
+  
   final String image;
   final String text;
   final Function onTap;

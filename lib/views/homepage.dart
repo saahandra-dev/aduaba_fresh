@@ -1,7 +1,6 @@
 import 'package:aduaba_fresh/views/account_details.dart';
 import 'package:aduaba_fresh/views/categories.dart';
 import 'package:aduaba_fresh/views/discover/discover_screen.dart';
-import 'package:aduaba_fresh/views/sign_in.dart';
 import 'package:aduaba_fresh/widgets/homepage_widgets/categories.dart';
 import 'package:aduaba_fresh/widgets/homepage_widgets/drawer.dart';
 import 'package:aduaba_fresh/widgets/homepage_widgets/product_section_heading.dart';
@@ -164,7 +163,6 @@ class _HomePageState extends State<HomePage> {
                       title: 'Raw Food',
                       boxColor: Color(0xFF3A953C).withOpacity(0.1),
                       textColor: Color(0xFF3A953C),
-                      
                     ),
                     CategoriesCard(
                       title: 'Spices',
@@ -228,8 +226,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   
-                  
-
+                
             ],),
           ),
         ),

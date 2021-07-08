@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:aduaba_fresh/models/product.dart';
-import 'package:aduaba_fresh/models/products_marks.dart';
 
 class OptionCard extends StatelessWidget {
   final Product product;

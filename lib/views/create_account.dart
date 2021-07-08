@@ -1,8 +1,12 @@
+import 'dart:convert';
+
+import 'package:aduaba_fresh/views/homepage.dart';
 import 'package:aduaba_fresh/views/sign_in.dart';
 import 'package:aduaba_fresh/widgets/reusable_button_img.dart';
 import 'package:aduaba_fresh/widgets/reusable_button_no_img.dart';
 import 'package:aduaba_fresh/widgets/reusable_form_field.dart';
 import 'package:aduaba_fresh/widgets/form_field_label.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class CreateAccount extends StatefulWidget {
@@ -13,6 +17,47 @@ class CreateAccount extends StatefulWidget {
 }
 
 class _CreateAccountState extends State<CreateAccount> {
+
+  final _formKey = GlobalKey<FormState>();
+
+  TextEditingController _firstNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _confirmpasswordController = TextEditingController();
+
+   Future<void> register() async {
+  if (_passwordController.text == _confirmpasswordController.text 
+      && _passwordController.text.isNotEmpty && _emailController.text.isNotEmpty
+      && _firstNameController.text.isNotEmpty && _lastNameController.text.isNotEmpty) {
+    var response = await http.post(Uri.parse("https://teamaduaba.azurewebsites.net/register"), 
+        body: jsonEncode({
+          "email": _emailController.text,
+          "password": _passwordController.text,
+          "firstName": _firstNameController.text,
+          "lastName": _lastNameController.text
+          }),
+        headers: {
+          "Register":"application/json",
+          "Content-Type":"application/json"
+        }
+          );
+          if(response.statusCode == 200) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Authenticating")));
+            Navigator.pushNamed(context, HomePage.id);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid Credentials")));
+            print(response.body);
+          }
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 
+    Padding(
+      padding: const EdgeInsets.only(left: 30.0),
+      child: Text("Fields cannot be blank"),
+    )));
+  }
+}
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,46 +133,106 @@ class _CreateAccountState extends State<CreateAccount> {
                     ),
                   ),
                   SizedBox(height: 24.0,),
-                  TextFormFieldLabel(
-                    text: 'First Name',
-                  ),
-                  ReusableTextFormField(
-                    hintText: 'Enter first name',
-                  ),
-                  SizedBox(height: 24.0,),
-                  TextFormFieldLabel(
-                    text: 'Last Name',
-                  ),
-                  ReusableTextFormField(
-                    hintText: 'Enter last name',
-                  ),
-                  SizedBox(height: 24.0,),
-                  TextFormFieldLabel(
-                    text: 'Email Address',
-                  ),
-                  ReusableTextFormField(
-                    hintText: 'Enter email address',
-                  ),
-                  SizedBox(height: 24.0,),
-                  TextFormFieldLabel(
-                    text: 'Password',
-                  ),
-                  ReusableTextFormField(
-                    hintText: 'Enter password',
-                  ),
-                  SizedBox(height: 24.0,),
-                  TextFormFieldLabel(
-                    text: 'Confirm Password',
-                  ),
-                  ReusableTextFormField(
-                    hintText: 'Enter password',
-                  ),
-                  SizedBox(height: 24.0,),
-                  ReusableButtonNoImg(
-                    onpressed: () {},
-                    text: 'Create Account',
-                    primary: Color(0XFF3A953C),
-                    fontweight: FontWeight.w700,
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextFormFieldLabel(
+                          text: 'First Name',
+                        ),
+                        SizedBox(height: 16.0,),
+                        ReusableTextFormField(
+                          controller: _firstNameController,
+                          onSaved: (String name) {},
+                          hintText: 'Enter first name',
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your first name';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 24.0,),
+                        TextFormFieldLabel(
+                          text: 'Last Name',
+                        ),
+                        SizedBox(height: 16.0,),
+                        ReusableTextFormField(
+                          controller: _lastNameController,
+                          hintText: 'Enter last name',
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your last name';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 24.0,),
+                        TextFormFieldLabel(
+                          text: 'Email Address',
+                        ),
+                        SizedBox(height: 16.0,),
+                        ReusableTextFormField(
+                          controller: _emailController,
+                          hintText: 'Enter email address',
+                          validator: (val) => val.isEmpty || !val.contains('@') || !val.contains('.')
+                          ? 'Please enter a valid email'
+                          : null
+                        ),
+                        SizedBox(height: 24.0,),
+                        TextFormFieldLabel(
+                          text: 'Password',
+                        ),
+                        SizedBox(height: 16.0,),
+                        ReusableTextFormField(
+                          controller: _passwordController,
+                          hintText: 'Enter password',
+                          validator:  (value) {
+
+                          String  pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+                          RegExp regExp = new RegExp(pattern);
+                          
+                          if(value.isEmpty) {
+                            return 'Please enter a password';
+                          }
+                            if (!regExp.hasMatch(value)) {
+                              return 'must contain a special character, lower and uppercase \nand not be less than 8 characters';
+                            }
+                          }
+                        ),
+                        SizedBox(height: 24.0,),
+                        TextFormFieldLabel(
+                          text: 'Confirm Password',
+                        ),
+                        SizedBox(height: 16.0,),
+                        ReusableTextFormField(
+                          controller: _confirmpasswordController,
+                          hintText: 'Enter password',
+                          validator: (value) {
+                            if(_passwordController.text == value){
+                              return null;
+                            } else {
+                              return 'Password does not match';
+                            }
+                            
+                          },
+                        ),
+                        SizedBox(height: 24.0,),
+                        ReusableButtonNoImg(
+                          onpressed: () {
+                            if(_formKey.currentState.validate()) {
+                              register();
+                            }
+                            
+                          },
+                          text: 'Create Account',
+                          primary: Color(0XFF3A953C),
+                          fontweight: FontWeight.w700,
+                        ),
+                      ],
+                    )
+                  
                   ),
                   SizedBox(height: 24.0,),
                   Center(
