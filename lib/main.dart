@@ -34,7 +34,7 @@ class AduabaFresh extends StatelessWidget {
         accentColor: Colors.green
         ),
       debugShowCheckedModeBanner: false,
-      initialRoute: SplashScreen.id,
+      initialRoute: HomePage.id,
       routes: {
         Onboarding.id: (context) => Onboarding(),
         SplashScreen.id: (context) => SplashScreen(),

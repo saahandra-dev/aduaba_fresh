@@ -1,6 +1,8 @@
 import 'package:aduaba_fresh/models/products_marks.dart';
 import 'package:aduaba_fresh/models/product.dart';
+import 'package:aduaba_fresh/views/account_details.dart';
 import 'package:aduaba_fresh/views/cart/cart_screen.dart';
+import 'package:aduaba_fresh/views/homepage.dart';
 import 'package:flutter/material.dart';
 
 
@@ -57,42 +59,53 @@ class _DiscoverScreenState extends State<DiscoverScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFE5E5E5),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.only(left: 35, right: 35),
-        decoration: BoxDecoration(
-          color: Color(0xFFFFFFFF),
-        ),      
-        child: BottomNavigationBar(
-          onTap: onTabTapped, // new
-          currentIndex: _currentIndex,       
-          backgroundColor: Color(0xFFFFFFFF),
-          elevation: 0,
-          showUnselectedLabels: false,
-          showSelectedLabels: false,
-          selectedItemColor: Color(0xFF3A953C),
-          unselectedItemColor: Color(0xFF999999),
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home,
+      // backgroundColor: Color(0xFFE5E5E5),
+      bottomNavigationBar: BottomNavigationBar(
+        iconSize: 35.0,
+        onTap: onTabTapped, // new
+        currentIndex: _currentIndex,       
+        backgroundColor: Color(0xFFFFFFFF),
+        elevation: 0,
+        showUnselectedLabels: false,
+        showSelectedLabels: false,
+        selectedItemColor: Color(0xFF3A953C),
+        unselectedItemColor: Color(0xFF999999),
+        items: [
+          BottomNavigationBarItem(
+            icon: InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, HomePage.id);
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 50.0),
+                child: Icon(
+                  Icons.home_outlined,
+                ),
               ),
-              label: 'Home'
             ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.search,
+            label: 'Home'
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.search,
+            ),
+            label: 'Search'
+          ),
+          BottomNavigationBarItem(
+            icon: InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, AccountDetails.id);
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 50),
+                child: Icon(
+                  Icons.more_horiz,
+                ),
               ),
-              label: 'Search'
             ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.more_horiz,
-              ),
-              label: 'More'
-            ),
-          ],
-        ),
+            label: 'More'
+          ),
+        ],
       ),
       appBar: AppBar(
         toolbarHeight: 124,

@@ -1,4 +1,5 @@
 import 'package:aduaba_fresh/views/account_details.dart';
+import 'package:aduaba_fresh/views/discover/discover_screen.dart';
 import 'package:aduaba_fresh/views/homepage.dart';
 import 'package:aduaba_fresh/widgets/reusable_button_no_img.dart';
 import 'package:aduaba_fresh/widgets/reusable_form_field.dart';
@@ -31,13 +32,16 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                 onTap: () {
                   Navigator.pushNamed(context, HomePage.id);
                 },
-                child: Icon(Icons.home))
+                child: Icon(Icons.home_outlined))
               ),
               BottomNavigationBarItem(
               label: 'search',
               icon: InkWell(
                 onTap: () {
-                  // Navigator.pushNamed(context, AccountDetails.id);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DiscoverScreen()),
+                  );
                 },
                 child: Icon(Icons.search))
               ),
@@ -159,7 +163,7 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                       )
                       ],),
                       IconButton(
-                        icon: Icon(Icons.delete),
+                        icon: Icon(Icons.delete_outline),
                         onPressed: () {},
                       )
                     ],)
@@ -196,7 +200,9 @@ class ShipAddressBottomSheet extends StatelessWidget {
               ),
               ),
               IconButton(icon: Icon(Icons.clear), 
-              onPressed: () {}
+              onPressed: () {
+                Navigator.pop(context);
+              }
               )
             ],
           ),

@@ -141,8 +141,8 @@ class _SignInState extends State<SignIn> {
                 ReusableButtonNoImg(
                   text: 'Login',
                   onpressed: () {
-                    login();
-                    // Navigator.pushNamed(context, HomePage.id);
+                    // login();
+                    Navigator.pushNamed(context, HomePage.id);
                   },
                   primary: Color(0XFF3A953C),
                   fontweight: FontWeight.w700,

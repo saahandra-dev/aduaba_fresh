@@ -1,4 +1,6 @@
+import 'package:aduaba_fresh/views/details_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:favorite_button/favorite_button.dart';
 
 class BestSellingStack extends StatelessWidget {
   BestSellingStack({this.image});
@@ -67,12 +69,25 @@ class BestSellingStack extends StatelessWidget {
             ],)
           ],),
           Positioned(
-            top: 10.25,
-            left: 130.5,
-            right: 10.25,
-            child: InkWell(
-              onTap: () {},
-              child: Image.asset('assets/images/heart.png')))
+            top: 7.0,
+            left: 125.5,
+            right: 9.25,
+            child: Material(
+              color: Colors.transparent,
+              elevation: 20,
+              child: FavoriteButton(
+                iconColor: Color(0xFFED111F),
+                iconDisabledColor: Colors.white,
+                iconSize: 30.0,
+                valueChanged: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DetailsScreen()),
+                  );
+                },
+              ),
+            )
+          )
         ]),
     );
   }

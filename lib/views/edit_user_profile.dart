@@ -1,4 +1,5 @@
 import 'package:aduaba_fresh/views/account_details.dart';
+import 'package:aduaba_fresh/widgets/add_user_image.dart';
 import 'package:aduaba_fresh/widgets/reusable_button_no_img.dart';
 import 'package:aduaba_fresh/widgets/reusable_form_field.dart';
 import 'package:aduaba_fresh/widgets/reusable_box_header.dart';
@@ -44,12 +45,19 @@ class _EditUserProfileState extends State<EditUserProfile> {
                     Positioned(
                       top:0,
                       right: 0,
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        child: CircleAvatar(
-                          backgroundColor: Color(0xFF979797),
-                          child: Image.asset('assets/images/add_image_icon.png'),
+                      child: InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                        context: context, 
+                        builder: (context) => addUserImage());
+                        },
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          child: CircleAvatar(
+                            backgroundColor: Color(0xFF979797),
+                            child: Image.asset('assets/images/add_image_icon.png'),
+                          ),
                         ),
                       ),
                     )

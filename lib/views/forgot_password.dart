@@ -13,6 +13,8 @@ class ForgotPassword extends StatefulWidget {
 
 class _ForgotPasswordState extends State<ForgotPassword> {
   int _value = 0;
+  int _smsValue = 1;
+  int _emailValue = 2;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,10 +67,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   Expanded(
                     child:  ListView(children: [
                     GestureDetector(
-                      onTap: () => showModalBottomSheet(
+                      onTap: () { 
+                        setState(() {
+                          _value = _smsValue;                 
+                        });
+                        showModalBottomSheet(
                         context: context, 
-                        builder: (context) => ViaSMS()
-                      ),
+                        builder: (context) => ViaSMS());
+                        
+                      },
                       child: ListTile(
                         leading: Container(
                             width: 44.0,
@@ -97,7 +104,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           ),
                           ),
                           trailing: Radio(
-                            value: 1, 
+                            value: _smsValue, 
                             groupValue: _value, 
                             onChanged: (value) {
                               setState(() {
@@ -108,10 +115,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     ),
                     SizedBox(height: 24.0,),
                     GestureDetector(
-                      onTap: () => showModalBottomSheet(
+                      onTap: () { 
+                        setState(() {
+                          _value = _emailValue;                 
+                        });
+                        showModalBottomSheet(
                         context: context, 
-                        builder: (context) => ResetPassword()
-                      ),
+                        builder: (context) => ResetPassword());
+                        
+                      },
                       child: ListTile(
                         leading: Container(
                             width: 44.0,
@@ -140,10 +152,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           ),
                           ),
                           trailing: Radio(
-                            value: 2, 
+                            value: _emailValue, 
                             groupValue: _value, 
                             onChanged: (value) {
-                              _value = value;
+                              setState(() {
+                                _value = value;                 
+                              });
                             }
                             ),
                       ),

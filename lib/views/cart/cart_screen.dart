@@ -44,42 +44,36 @@ class CartScreen extends StatelessWidget {
                             style: TextStyle(color: Color(0xFF819272)),
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 4),
-                          child: Container(
-                            child: Row(
-                              children: [
-                                IconButton(
-                                  icon:Icon(Icons.check),
-                                  color: Color(0xFF819272),
-                                  onPressed: () {}
-                                ),
-                                Text(
-                                  'Select All', 
-                                  style: TextStyle(color: Color(0xFF819272)),
-                                ),                               
-                              ],
-                            ),
+                        Container(
+                          child: Row(
+                            children: [
+                              IconButton(
+                                icon:Icon(Icons.check),
+                                color: Color(0xFF819272),
+                                onPressed: () {}
+                              ),
+                              Text(
+                                'Select All', 
+                                style: TextStyle(color: Color(0xFF819272)),
+                              ),                               
+                            ],
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 4),
-                          child: Container(
-                            child: Row(
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.delete),
-                                  color: Color(0xFF819272),
-                                  onPressed: () {}
-                                ),
-                                Text(
-                                  'Delete Selected',
-                                  style: TextStyle(color: Color(0xFF819272)),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),                     
+
+                        TextButton.icon(
+                           onPressed: () {
+
+                           },
+                           clipBehavior: Clip.none,
+                           icon: Icon(
+                             Icons.delete_outline,
+                             color: Color(0xFF819272),
+                           ),
+                           label: Text('Delete Selected',
+                           style: TextStyle(color: Color(0xFF819272)
+                           ),
+                           )
+                         ),                     
                       ],
                     ),                 
                 ],
