@@ -1,6 +1,7 @@
 import 'package:aduaba_fresh/views/account_details.dart';
 import 'package:aduaba_fresh/views/categories.dart';
 import 'package:aduaba_fresh/views/discover/discover_screen.dart';
+import 'package:aduaba_fresh/models/user.dart';
 import 'package:aduaba_fresh/widgets/homepage_widgets/categories.dart';
 import 'package:aduaba_fresh/widgets/homepage_widgets/drawer.dart';
 import 'package:aduaba_fresh/widgets/homepage_widgets/product_section_heading.dart';
@@ -18,12 +19,22 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
+  String firstName = '';
 
   void _onItemTapped(int index) {
-  setState(() {
-    selectedIndex = index;
-  });
-}
+    setState(() {
+      selectedIndex = index;
+    });
+  }
+
+  // @override 
+  // void initState() {
+  //   super.initState();
+    
+  //   User userFirstName = new User(firstName: "firstName",);
+  //   firstName = UserPreference.saveUser(userFirstName) ?? '';
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,7 +137,7 @@ class _HomePageState extends State<HomePage> {
               // mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-              Text('Hi, Andrea',
+              Text('Hi $firstName',
               style: TextStyle(
                 color: Color(0XFF3A683B),
                 fontSize: 17.0,

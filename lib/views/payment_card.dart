@@ -1,4 +1,5 @@
 import 'package:aduaba_fresh/views/account_details.dart';
+import 'package:aduaba_fresh/views/discover/discover_screen.dart';
 import 'package:aduaba_fresh/views/homepage.dart';
 import 'package:aduaba_fresh/widgets/reusable_button_no_img.dart';
 import 'package:aduaba_fresh/widgets/reusable_form_field.dart';
@@ -31,12 +32,19 @@ class _PaymentCardState extends State<PaymentCard> {
               onTap: () {
                 Navigator.pushNamed(context, HomePage.id);
               },
-              child: Icon(Icons.home))
+              child: Padding(
+                padding: const EdgeInsets.only(left: 50.0),
+                child: Icon(Icons.home_outlined),
+              ))
             ),
             BottomNavigationBarItem(
             label: 'search',
             icon: InkWell(
               onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DiscoverScreen()),
+                  );
                 // Navigator.pushNamed(context, AccountDetails.id);
               },
               child: Icon(Icons.search))
@@ -47,7 +55,10 @@ class _PaymentCardState extends State<PaymentCard> {
               onTap: () {
                 Navigator.pushNamed(context, AccountDetails.id);
               },
-              child: Icon(Icons.more_horiz))
+              child: Padding(
+                padding: const EdgeInsets.only(right: 50.0),
+                child: Icon(Icons.more_horiz),
+              ))
             ),
         ],
         // currentIndex: selectedIndex,
@@ -89,7 +100,7 @@ class _PaymentCardState extends State<PaymentCard> {
                       SizedBox(width: 23.57,),
                       Text('1009 •••• •••• 2017'),
                       Spacer(),
-                      IconButton(icon: Icon(Icons.delete), 
+                      IconButton(icon: Icon(Icons.delete_outline), 
                       onPressed: () {})
                     ],),
                   );

@@ -3,15 +3,27 @@ class User {
   String password;
   String firstName;
   String lastName;
+  String imageUrl;
+  String phoneNumber;
 
-  User({this.email, this.password, this.firstName, this.lastName});
+  User({
+    this.email, 
+    this.password, 
+    this.firstName, 
+    this.lastName,
+    this.imageUrl,
+    this.phoneNumber
+  });
 
   factory User.fromJson(Map<String, dynamic> responseData) {
     return User(
       email: responseData['email'],
       password: responseData['password'],
       firstName: responseData['firstName'],
-      lastName: responseData['lastName']
+      lastName: responseData['lastName'],
+      imageUrl: responseData['imageUrl'],
+      phoneNumber: responseData['phoneNumber']
+
     );
   }
 

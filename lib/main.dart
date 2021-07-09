@@ -1,3 +1,5 @@
+
+import 'package:aduaba_fresh/utils/user_preference.dart';
 import 'package:aduaba_fresh/views/categories.dart';
 import 'package:aduaba_fresh/views/checkout_payment.dart';
 import 'package:aduaba_fresh/views/edit_user_profile.dart';
@@ -16,7 +18,11 @@ import 'package:aduaba_fresh/views/account_details.dart';
 import 'package:aduaba_fresh/views/wishlist.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+Future main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await UserPreference.init();
+
   runApp(AduabaFresh());
 }
 
@@ -34,7 +40,7 @@ class AduabaFresh extends StatelessWidget {
         accentColor: Colors.green
         ),
       debugShowCheckedModeBanner: false,
-      initialRoute: HomePage.id,
+      initialRoute: SplashScreen.id,
       routes: {
         Onboarding.id: (context) => Onboarding(),
         SplashScreen.id: (context) => SplashScreen(),
@@ -51,7 +57,8 @@ class AduabaFresh extends StatelessWidget {
         OrderSummary.id: (context) => OrderSummary(),
         PaymentCard.id: (context) => PaymentCard(),
         CheckoutPayment.id: (context) => CheckoutPayment(),
-        ShippingDetails.id: (context) => ShippingDetails()
+        ShippingDetails.id: (context) => ShippingDetails(),
+        
       }
     );
   }

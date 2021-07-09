@@ -21,6 +21,8 @@ class _CreateAccountState extends State<CreateAccount> {
 
   final _formKey = GlobalKey<FormState>();
 
+  String firstName = '';
+
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _lastNameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
@@ -28,14 +30,19 @@ class _CreateAccountState extends State<CreateAccount> {
   TextEditingController _confirmpasswordController = TextEditingController();
 
    Future<void> register() async {
+
   if (_passwordController.text == _confirmpasswordController.text 
       && _passwordController.text.isNotEmpty && _emailController.text.isNotEmpty
-      && _firstNameController.text.isNotEmpty && _lastNameController.text.isNotEmpty) {
+      && firstName.isNotEmpty && _lastNameController.text.isNotEmpty) {
+
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      duration: Duration(seconds: 1),
+      content: Text("Authenticating")));
     var response = await http.post(Uri.parse("https://teamaduaba.azurewebsites.net/register"), 
         body: jsonEncode({
           "email": _emailController.text,
           "password": _passwordController.text,
-          "firstName": _firstNameController.text,
+          "firstName": firstName,
           "lastName": _lastNameController.text
           }),
         headers: {
@@ -44,7 +51,7 @@ class _CreateAccountState extends State<CreateAccount> {
         }
           );
           if(response.statusCode == 200) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Authenticating")));
+            
             Navigator.pushNamed(context, HomePage.id);
           } else {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid Credentials")));
@@ -59,7 +66,13 @@ class _CreateAccountState extends State<CreateAccount> {
   }
 }
 
- 
+  // @override 
+  // void initState() {
+  //   super.initState();
+
+  //   _firstNameController.text = UserPreference.getUserFirstName() ?? '';
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,8 +158,16 @@ class _CreateAccountState extends State<CreateAccount> {
                         ),
                         SizedBox(height: 16.0,),
                         ReusableTextFormField(
-                          controller: _firstNameController,
-                          onSaved: (String name) {},
+                          onChanged: (value) {
+                            setState(() {
+                              firstName = value;
+                            });
+                          },
+                      
+                          // controller: _firstNameController,
+                          onSaved: (String firstName) {
+                            // print(firstName);
+                          },
                           hintText: 'Enter first name',
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -223,6 +244,8 @@ class _CreateAccountState extends State<CreateAccount> {
                         SizedBox(height: 24.0,),
                         ReusableButtonNoImg(
                           onpressed: () {
+                            // await UserPreference.setUserFirstName(firstName);
+                            
                             if(_formKey.currentState.validate()) {
                               register();
                             }

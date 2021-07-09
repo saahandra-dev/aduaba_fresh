@@ -1,4 +1,5 @@
 import 'package:aduaba_fresh/views/account_details.dart';
+import 'package:aduaba_fresh/views/discover/discover_screen.dart';
 import 'package:aduaba_fresh/views/homepage.dart';
 import 'package:aduaba_fresh/widgets/reusable_button_no_img.dart';
 import 'package:aduaba_fresh/widgets/reusable_box_header.dart';
@@ -32,12 +33,19 @@ class _WishListState extends State<WishList> {
                 onTap: () {
                   Navigator.pushNamed(context, HomePage.id);
                 },
-                child: Icon(Icons.home))
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 50.0),
+                  child: Icon(Icons.home_outlined),
+                ))
               ),
               BottomNavigationBarItem(
               label: 'search',
               icon: InkWell(
                 onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DiscoverScreen()),
+                  );
                   // Navigator.pushNamed(context, AccountDetails.id);
                 },
                 child: Icon(Icons.search))
@@ -48,7 +56,10 @@ class _WishListState extends State<WishList> {
                 onTap: () {
                   Navigator.pushNamed(context, AccountDetails.id);
                 },
-                child: Icon(Icons.more_horiz))
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 50.0),
+                  child: Icon(Icons.more_horiz),
+                ))
               ),
           ],
           // currentIndex: selectedIndex,
@@ -69,7 +80,7 @@ class _WishListState extends State<WishList> {
               children: [
                 SizedBox(height: 10.0,),
                 Container(
-                  child: Text('18 items listed',
+                  child: Text('0 items listed',
                   style: TextStyle(
                     color: Color(0xFF999999),
                     fontSize: 13.0,
@@ -205,7 +216,12 @@ wishListBody() {
                   text: 'Discover products',
                   fontsize: 16.0,
                   fontweight: FontWeight.w700,
-                  onpressed: () {},
+                  onpressed: () {
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => DiscoverScreen()),
+                    // );
+                  },
                   primary: Color(0xFF3A953C),
                 )
               ],

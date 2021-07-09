@@ -25,6 +25,9 @@ class _SignInState extends State<SignIn> {
 
   Future<void> login() async {
   if (passwordController.text.isNotEmpty && emailController.text.isNotEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      duration: Duration(milliseconds: 700),
+      content: Text("Authenticating")));
     var response = await http.post(Uri.parse("https://teamaduaba.azurewebsites.net/login"), 
         body: jsonEncode({
           'email': emailController.text, 
@@ -38,7 +41,7 @@ class _SignInState extends State<SignIn> {
           if(response.statusCode == 200) {
             Navigator.pushNamed(context, HomePage.id);
           } else {
-            // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid Credentials")));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid Credentials")));
             print(response.body);
           }
   } else {
@@ -141,8 +144,8 @@ class _SignInState extends State<SignIn> {
                 ReusableButtonNoImg(
                   text: 'Login',
                   onpressed: () {
-                    // login();
-                    Navigator.pushNamed(context, HomePage.id);
+                    login();
+                    // Navigator.pushNamed(context, HomePage.id);
                   },
                   primary: Color(0XFF3A953C),
                   fontweight: FontWeight.w700,
