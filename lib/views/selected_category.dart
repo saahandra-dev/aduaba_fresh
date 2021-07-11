@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:aduaba_fresh/models/category.dart';
 import 'package:aduaba_fresh/models/product.dart';
 import 'package:aduaba_fresh/views/account_details.dart';
 import 'package:aduaba_fresh/views/categories.dart';
@@ -14,10 +15,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class SelectedCategory extends StatefulWidget {
-  SelectedCategory({ Key key, this.categoryId }) : super(key: key);
+  SelectedCategory({ Key key, this.category}) : super(key: key);
   static String id = 'selected_category';
 
-  final String categoryId; 
+  final Category category; 
 
   @override
   _SelectedCategoryState createState() => _SelectedCategoryState();
@@ -38,7 +39,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
       // print(widget.categoryId);
       setState(() {
         
-      product = allproduct.where((e) => e.categoryId == widget.categoryId ).toList();
+      product = allproduct.where((e) => e.categoryId == widget.category.id ).toList();
 
       });
     //  print(product);
@@ -118,7 +119,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Raw Food',
+                    Text('${widget.category.name}',
                     style: TextStyle(
                       fontSize: 24.0,
                       fontWeight: FontWeight.w700,

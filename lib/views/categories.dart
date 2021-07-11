@@ -151,7 +151,7 @@ class _CategoriesState extends State<Categories> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SelectedCategory(categoryId: category[index].id))
+                        MaterialPageRoute(builder: (context) => SelectedCategory(category: category[index]))
                       );
                       // Navigator.pushNamed(context, SelectedCategory.id);
                     },
@@ -185,7 +185,7 @@ class _CategoriesState extends State<Categories> {
                                 fontWeight: FontWeight.w700
                               ),
                               ),
-                              Text('234 items',
+                              Text('234',
                               style: TextStyle(
                                 fontSize: 13.0,
                                 fontWeight: FontWeight.w400,

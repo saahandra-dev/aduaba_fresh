@@ -1,9 +1,13 @@
+import 'dart:io';
+
+import 'package:aduaba_fresh/models/user.dart';
+import 'package:aduaba_fresh/utils/user_preference.dart';
 import 'package:aduaba_fresh/views/account_details.dart';
-import 'package:aduaba_fresh/widgets/add_user_image.dart';
 import 'package:aduaba_fresh/widgets/reusable_button_no_img.dart';
 import 'package:aduaba_fresh/widgets/reusable_form_field.dart';
 import 'package:aduaba_fresh/widgets/reusable_box_header.dart';
 import 'package:aduaba_fresh/widgets/form_field_label.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 
 class EditUserProfile extends StatefulWidget {
@@ -15,6 +19,45 @@ class EditUserProfile extends StatefulWidget {
 }
 
 class _EditUserProfileState extends State<EditUserProfile> {
+  File _image;
+
+ _imgFromCamera() async {
+  File image = await ImagePicker.pickImage(
+    source: ImageSource.camera, imageQuality: 50
+  );
+
+  setState(() {
+    _image = image;
+  });
+}
+
+_imgFromGallery() async {
+  File image = await  ImagePicker.pickImage(
+      source: ImageSource.gallery, imageQuality: 50
+  );
+
+  setState(() {
+    _image = image;
+  });
+}
+
+   User user;
+
+  @override
+  void initState() {
+    getUserFromSP();
+    super.initState();
+  }
+
+  getUserFromSP() async {
+    UserPreference up = new UserPreference();
+    User usr = await up.getUser();
+    print(usr.toJson()['firstName']);
+    setState(() {
+      user = usr;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +67,6 @@ class _EditUserProfileState extends State<EditUserProfile> {
           children: [
             Expanded(
               child: ListView(
-                // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                 ReusableBoxHeader(
                   text: 'Edit Profile',
@@ -35,13 +77,31 @@ class _EditUserProfileState extends State<EditUserProfile> {
                 SizedBox(height: 48.0,),
                 Center(
                   child: Stack(children: [
-                    Container(
-                      width: 129,
-                      height: 129,
-                      child: CircleAvatar(
-                        child: Image.asset('assets/images/edit_acc_profile.png'),
-                      ),
-                    ),
+                    CircleAvatar(
+                      radius: 55,
+                      backgroundColor: Colors.white,
+                      child: _image != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(50),
+                              child: Image.file(
+                                _image,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.fill,
+                              ),
+                            )
+                          : Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(50)),
+                              width: 100,
+                              height: 100,
+                              child: Icon(
+                                Icons.camera_alt,
+                                color: Colors.grey[800],
+                              ),
+                            ),
+                          ),
                     Positioned(
                       top:0,
                       right: 0,
@@ -49,7 +109,41 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         onTap: () {
                           showModalBottomSheet(
                         context: context, 
-                        builder: (context) => addUserImage());
+                        builder: (context) => Container(
+                            height: 100.0,
+                            width: double.infinity,
+                            margin: EdgeInsets.all(20.0),
+                            child: Column(
+                              children: [
+                                Text('Choose a profile photo',
+                                    style: TextStyle(
+                                      fontSize: 20.0,
+                                    )),
+                                SizedBox(height: 10.0,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    ElevatedButton.icon(
+                                        onPressed: () {
+                                          _imgFromCamera();
+                                          Navigator.of(context).pop();
+                                        },
+                                        icon: Icon(Icons.camera),
+                                        label: Text('Camera')
+                                      ),
+                                    SizedBox(width: 10.0,),
+                                    ElevatedButton.icon(
+                                        onPressed: () {
+                                          _imgFromGallery();
+                                          Navigator.of(context).pop();
+                                        },
+                                        icon: Icon(Icons.image),
+                                        label: Text('Gallery'))
+                                  ],
+                                )
+                              ],
+                            ),
+                          ));
                         },
                         child: Container(
                           width: 40,
@@ -69,7 +163,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                 ),
                 SizedBox(height: 16.0,),
                 ReusableTextFormField(
-                  hintText: 'Andrea',
+                  hintText: '${this.user?.firstName}',
                 ),
                 SizedBox(height: 16.0,),
                 TextFormFieldLabel(
@@ -77,7 +171,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                 ),
                 SizedBox(height: 16.0,),
                 ReusableTextFormField(
-                  hintText: 'Charles',
+                  hintText: '${this.user?.lastName}',
                 ),
                 SizedBox(height: 16.0,),
                 TextFormFieldLabel(
@@ -85,7 +179,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                 ),
                 SizedBox(height: 16.0,),
                 ReusableTextFormField(
-                  hintText: '+234 809 202 3024',
+                  hintText: '${this.user?.phoneNumber}',
                 ),
               ],),
             ),

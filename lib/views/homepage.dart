@@ -5,8 +5,8 @@ import 'package:aduaba_fresh/utils/user_preference.dart';
 import 'package:aduaba_fresh/views/account_details.dart';
 import 'package:aduaba_fresh/views/categories.dart';
 import 'package:aduaba_fresh/models/user.dart';
+import 'package:aduaba_fresh/views/orders.dart';
 import 'package:aduaba_fresh/views/selected_category.dart';
-import 'package:aduaba_fresh/widgets/homepage_widgets/categories.dart';
 import 'package:aduaba_fresh/widgets/homepage_widgets/drawer.dart';
 import 'package:aduaba_fresh/widgets/homepage_widgets/product_section_heading.dart';
 import 'package:aduaba_fresh/widgets/homepage_widgets/product_stack.dart';
@@ -26,6 +26,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<Color> colors = [
+    Color(0xFF3A953C),
+    Color(0xFFBB2F48),
+    Color(0xFF3C673D),
+    Color(0xFFE75A21)
+  ];
+  
+
+
   int selectedIndex = 0;
   User user;
 
@@ -216,8 +225,13 @@ class _HomePageState extends State<HomePage> {
               ),
               ),
               SizedBox(height: 24.0,),
-              ReusableSearchField(
-                hintText: 'Search product',
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, Orders.id);
+                },
+                child: ReusableSearchField(
+                  hintText: 'Search product',
+                ),
               ),
               SizedBox(height: 32.0,),
 
@@ -241,7 +255,7 @@ class _HomePageState extends State<HomePage> {
                            onTap: () {
                              Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => SelectedCategory(categoryId: category[index].id))
+                              MaterialPageRoute(builder: (context) => SelectedCategory(category: category[index]))
                             );
                            },
                            child: Container(
@@ -249,7 +263,7 @@ class _HomePageState extends State<HomePage> {
                              width: 92,
                              height: 50,
                              decoration: BoxDecoration(
-                               color: Color(0xFF3C673D).withOpacity(0.1),
+                               color: colors[index%colors.length].withOpacity(0.1),
                                borderRadius: BorderRadius.circular(8.0)
                              ),
                              child: Center(
@@ -258,7 +272,7 @@ class _HomePageState extends State<HomePage> {
                                style: TextStyle(
                                  fontSize: 13.0,
                                  fontWeight: FontWeight.w700,
-                                 color: Color(0xFF3C673D)
+                                 color: colors[index%colors.length]
                                ),
                                ),
                              ),
@@ -274,30 +288,36 @@ class _HomePageState extends State<HomePage> {
 
                 SizedBox(height: 16.0,),
 
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      TodayPromoStack(),
-                      TodayPromoStack()
-                    ],
-                  )
+                // SingleChildScrollView(
+                //   scrollDirection: Axis.horizontal,
+                //   child: Row(
+                //     children: [
+                //       TodayPromoStack(),
+                //       TodayPromoStack()
+                //     ],
+                //   )
+                //   ),
+                  SizedBox(
+                    height: 181.0,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return TodayPromoStack();
+                      }
+                      ),
                   ),
-
                   SizedBox(height: 32,),
-
                   ProductSectionHeadings(
                     title: 'Best Selling',
                   ),
 
                   SizedBox(height: 16.0,),
-
                   SizedBox(
                     height: 280.0,
                     child: ListView.builder(
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
-                      
                       itemCount: featuredProduct.length,
                       itemBuilder: (context, index) {
                         return Container(

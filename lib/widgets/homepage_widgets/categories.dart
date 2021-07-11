@@ -1,5 +1,3 @@
-
-import 'package:aduaba_fresh/views/selected_category.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesCard extends StatelessWidget {

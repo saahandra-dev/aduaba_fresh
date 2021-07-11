@@ -1,5 +1,3 @@
-
-import 'package:aduaba_fresh/models/category.dart';
 import 'package:aduaba_fresh/utils/user_preference.dart';
 import 'package:aduaba_fresh/views/admin.dart';
 import 'package:aduaba_fresh/views/categories.dart';
@@ -42,7 +40,7 @@ class AduabaFresh extends StatelessWidget {
         accentColor: Colors.green
         ),
       debugShowCheckedModeBanner: false,
-      initialRoute: SplashScreen.id,
+      initialRoute: HomePage.id,
       routes: {
         Onboarding.id: (context) => Onboarding(),
         SplashScreen.id: (context) => SplashScreen(),
