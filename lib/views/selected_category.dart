@@ -232,10 +232,6 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                 amount: product[index].amount.toString(),
                                 instock: product[index].inStock.toString(),
                               ),
-                              // SizedBox(width: 16.0,),
-                              // BestSellingStack(
-                              //   image: 'assets/images/selected_category02.png',                    
-                              // )
                             ],),
                           );
                         }

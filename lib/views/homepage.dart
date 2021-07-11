@@ -18,6 +18,8 @@ import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
   static String id = 'homepage';
+  HomePage({ Key key, this.categoryId }) : super(key: key);
+  final String categoryId; 
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -237,7 +239,10 @@ class _HomePageState extends State<HomePage> {
                        itemBuilder: (context, index) {
                          return  InkWell(
                            onTap: () {
-                             Navigator.pushNamed(context, SelectedCategory.id);
+                             Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => SelectedCategory(categoryId: category[index].id))
+                            );
                            },
                            child: Container(
                              margin: EdgeInsets.only(right: 8.0),
