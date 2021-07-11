@@ -1,25 +1,54 @@
+import 'dart:convert';
+
+import 'package:aduaba_fresh/models/product.dart';
 import 'package:aduaba_fresh/views/account_details.dart';
 import 'package:aduaba_fresh/views/categories.dart';
 import 'package:aduaba_fresh/views/discover/discover_screen.dart';
 import 'package:aduaba_fresh/views/homepage.dart';
-import 'package:aduaba_fresh/widgets/homepage_widgets/best_selling_widget.dart';
+import 'package:aduaba_fresh/widgets/homepage_widgets/product_stack.dart';
 import 'package:aduaba_fresh/widgets/reusable_button_no_img.dart';
 import 'package:aduaba_fresh/widgets/reusable_search_field.dart';
 import 'package:aduaba_fresh/widgets/form_field_label.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class SelectedCategory extends StatefulWidget {
-  const SelectedCategory({ Key key }) : super(key: key);
+  SelectedCategory({ Key key, this.categoryId }) : super(key: key);
   static String id = 'selected_category';
+
+  final String categoryId; 
 
   @override
   _SelectedCategoryState createState() => _SelectedCategoryState();
 }
 
 class _SelectedCategoryState extends State<SelectedCategory> {
+
+
+  List<Product> product = [];
+
+  void getProduct() async {
+    var response = await http.get(Uri.parse("https://teamaduaba.azurewebsites.net/getProducts"));
+
+    if (response.statusCode == 200) {
+      // print(response.body);
+      List<dynamic> decoded = json.decode(response.body);
+      List<Product> allproduct = decoded.map((e) => Product.fromJson(e)).toList();
+      // print(widget.categoryId);
+      setState(() {
+        
+      product = allproduct.where((e) => e.categoryId == widget.categoryId ).toList();
+
+      });
+    //  print(product);
+    // print(response.body);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    getProduct();
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
           iconSize: 35,
@@ -43,10 +72,10 @@ class _SelectedCategoryState extends State<SelectedCategory> {
               label: 'search',
               icon: InkWell(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DiscoverScreen()),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => DiscoverScreen()),
+                  // );
                   // Navigator.pushNamed(context, AccountDetails.id);
                 },
                 child: Icon(Icons.search))
@@ -106,7 +135,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('18 items listed',
+                    Text('${product.length} items listed',
                     style: TextStyle(
                       color: Color(0xFFBBBBBB),
                       fontWeight: FontWeight.w400,
@@ -183,21 +212,30 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                     child: Container(
                       color: Color(0xFFF5F5F5).withOpacity(1),
                       margin: EdgeInsets.zero,
-                      child: ListView.builder(
-                        itemCount: 6,
+                       child: 
+                      StaggeredGridView.countBuilder(
+                        staggeredTileBuilder: (index) {
+                          return StaggeredTile.count(2, 3);
+                        },
+                        crossAxisCount: 4,
+                        itemCount: product.length,
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.fromLTRB(24.0, 0.0, 8.0, 28.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                              BestSellingStack(
-                                image: 'assets/images/selected_category01.png',
+                              ProductStack(
+                                image: product[index].imageUrl,
+                                manufacturer: product[index].manufacturer,
+                                description: product[index].shortDescription,
+                                amount: product[index].amount.toString(),
+                                instock: product[index].inStock.toString(),
                               ),
-                              SizedBox(width: 16.0,),
-                              BestSellingStack(
-                                image: 'assets/images/selected_category02.png',                    
-                              )
+                              // SizedBox(width: 16.0,),
+                              // BestSellingStack(
+                              //   image: 'assets/images/selected_category02.png',                    
+                              // )
                             ],),
                           );
                         }

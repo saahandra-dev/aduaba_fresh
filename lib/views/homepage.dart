@@ -1,13 +1,19 @@
+import 'dart:convert';
+import 'package:aduaba_fresh/models/category.dart';
+import 'package:aduaba_fresh/models/product.dart';
+import 'package:aduaba_fresh/utils/user_preference.dart';
 import 'package:aduaba_fresh/views/account_details.dart';
 import 'package:aduaba_fresh/views/categories.dart';
-import 'package:aduaba_fresh/views/discover/discover_screen.dart';
 import 'package:aduaba_fresh/models/user.dart';
+import 'package:aduaba_fresh/views/selected_category.dart';
 import 'package:aduaba_fresh/widgets/homepage_widgets/categories.dart';
 import 'package:aduaba_fresh/widgets/homepage_widgets/drawer.dart';
 import 'package:aduaba_fresh/widgets/homepage_widgets/product_section_heading.dart';
-import 'package:aduaba_fresh/widgets/homepage_widgets/best_selling_widget.dart';
+import 'package:aduaba_fresh/widgets/homepage_widgets/product_stack.dart';
+
 import 'package:aduaba_fresh/widgets/homepage_widgets/today_promo_stack.dart';
 import 'package:aduaba_fresh/widgets/reusable_search_field.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,7 +25,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
-  String firstName = '';
+  User user;
+
+  @override
+  void initState() {
+    getUserFromSP();
+    getCategoryName();
+    getBestSelling();
+    getFeaturedProduct();
+
+    super.initState();
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -27,13 +43,58 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  // @override 
-  // void initState() {
-  //   super.initState();
-    
-  //   User userFirstName = new User(firstName: "firstName",);
-  //   firstName = UserPreference.saveUser(userFirstName) ?? '';
-  // }
+  getUserFromSP() async {
+    UserPreference up = new UserPreference();
+    User usr = await up.getUser();
+    // print(usr.toJson()['firstName']);
+    setState(() {
+      user = usr;
+    });
+  }
+
+   List<Category> category = [];
+
+  void getCategoryName() async {
+    var response = await http.get(Uri.parse("https://teamaduaba.azurewebsites.net/categories"));
+    if (response.statusCode == 200) {
+      List<dynamic> decoded = json.decode(response.body);
+      
+      setState(() { 
+      category = decoded.map((e) => Category.fromJson(e)).toList();
+      });
+    }
+  }
+
+  List<Product> product = [];
+
+  void getBestSelling() async {
+    var response = await http.get(Uri.parse("https://teamaduaba.azurewebsites.net/BestSellingProduct"));
+
+    if (response.statusCode == 200) {
+      // print(response.body);
+      List<dynamic> decoded = json.decode(response.body);
+      setState(() {
+      product = decoded.map((e) => Product.fromJson(e)).toList();
+
+      });
+    }
+  }
+
+
+    List<Product> featuredProduct = [];
+
+  void getFeaturedProduct() async {
+    var response = await http.get(Uri.parse("https://teamaduaba.azurewebsites.net/BestSellingProduct"));
+
+    if (response.statusCode == 200) {
+      // print(response.body);
+      List<dynamic> decoded = json.decode(response.body);
+      setState(() {
+      featuredProduct = decoded.map((e) => Product.fromJson(e)).toList();
+
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,10 +163,10 @@ class _HomePageState extends State<HomePage> {
               label: 'search',
               icon: InkWell(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DiscoverScreen()),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => DiscoverScreen()),
+                  // );
                 },
                 child: Icon(Icons.search))
               ),
@@ -137,7 +198,7 @@ class _HomePageState extends State<HomePage> {
               // mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-              Text('Hi $firstName',
+              Text('Hi ${this.user?.firstName}',
               style: TextStyle(
                 color: Color(0XFF3A683B),
                 fontSize: 17.0,
@@ -164,34 +225,43 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pushNamed(context, Categories.id);
                 },
               ),
-
+              
               SizedBox(height: 16.0,),
-              SingleChildScrollView(
+              SizedBox(
+                height: 50.0,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
-                child: Container(
-                  child: Row(children: [
-                    CategoriesCard(
-                      title: 'Raw Food',
-                      boxColor: Color(0xFF3A953C).withOpacity(0.1),
-                      textColor: Color(0xFF3A953C),
-                    ),
-                    CategoriesCard(
-                      title: 'Spices',
-                      boxColor: Color(0xFFBB2F48).withOpacity(0.1),
-                      textColor: Color(0xFFBB2F48),
-                    ),
-                    CategoriesCard(
-                      title: 'Bakery',
-                      boxColor: Color(0xFF3C673D).withOpacity(0.1),
-                      textColor: Color(0xFF3C673D),
-                    ),
-                    CategoriesCard(
-                      title: 'Cosm',
-                      boxColor: Color(0xFFE75A21).withOpacity(0.1),
-                      textColor: Color(0xFFE75A21),
-                    ),
-                  ])
-                )),
+                       itemCount: category.length,
+                       itemBuilder: (context, index) {
+                         return  InkWell(
+                           onTap: () {
+                             Navigator.pushNamed(context, SelectedCategory.id);
+                           },
+                           child: Container(
+                             margin: EdgeInsets.only(right: 8.0),
+                             width: 92,
+                             height: 50,
+                             decoration: BoxDecoration(
+                               color: Color(0xFF3C673D).withOpacity(0.1),
+                               borderRadius: BorderRadius.circular(8.0)
+                             ),
+                             child: Center(
+                               child: Text(category[index].name,
+                               textAlign: TextAlign.center,
+                               style: TextStyle(
+                                 fontSize: 13.0,
+                                 fontWeight: FontWeight.w700,
+                                 color: Color(0xFF3C673D)
+                               ),
+                               ),
+                             ),
+                           ),
+                         );
+                       }
+                       ),
+              ),
                 SizedBox(height: 32.0,),
                 ProductSectionHeadings(
                   title: "Today's Promo"
@@ -217,26 +287,54 @@ class _HomePageState extends State<HomePage> {
 
                   SizedBox(height: 16.0,),
 
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Container(
-                      margin: EdgeInsets.only(right: 16.0),
-                      child: Row(
-                        children: [
-                          BestSellingStack(
-                            image: 'assets/images/best_selling01.png',
+                  SizedBox(
+                    height: 280.0,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      
+                      itemCount: featuredProduct.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          child: ProductStack(
+                            image: featuredProduct[index].imageUrl,
+                            manufacturer: featuredProduct[index].manufacturer,
+                            description: featuredProduct[index].shortDescription,
+                            amount: featuredProduct[index].amount.toString(),
+                            instock: featuredProduct[index].inStock.toString(),
                           ),
-                          BestSellingStack(
-                            image: 'assets/images/best_selling02.png',
-                          ),
-                          BestSellingStack(
-                            image: 'assets/images/best_selling02.png'
-                          ),
-                        ],
+                        );
+                      }
                       ),
-                    ),
                   ),
-                  
+                SizedBox(height: 36,),
+
+                ProductSectionHeadings(
+                    title: 'Featured Products',
+                  ),
+
+                  SizedBox(height: 16.0,),
+
+                  SizedBox(
+                    height: 280.0,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      
+                      itemCount: product.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          child: ProductStack(
+                            image: product[index].imageUrl,
+                            manufacturer: product[index].manufacturer,
+                            description: product[index].shortDescription,
+                            amount: product[index].amount.toString(),
+                            instock: product[index].inStock.toString(),
+                          ),
+                        );
+                      }
+                      ),
+                  ),
                 
             ],),
           ),
@@ -247,16 +345,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,13 +1,39 @@
+import 'package:aduaba_fresh/models/user.dart';
+import 'package:aduaba_fresh/utils/user_preference.dart';
 import 'package:aduaba_fresh/views/categories.dart';
 import 'package:aduaba_fresh/views/account_details.dart';
+import 'package:aduaba_fresh/views/orders.dart';
 import 'package:aduaba_fresh/views/wishlist.dart';
 import 'package:aduaba_fresh/widgets/homepage_widgets/user_name.dart';
 import 'package:flutter/material.dart';
 
-class DrawerBody extends StatelessWidget {
-  const DrawerBody({
-    Key key,
-  }) : super(key: key);
+
+class DrawerBody extends StatefulWidget {
+  const DrawerBody({ Key key }) : super(key: key);
+
+  @override
+  _DrawerBodyState createState() => _DrawerBodyState();
+}
+
+class _DrawerBodyState extends State<DrawerBody> {
+
+  User user;
+
+  @override
+  void initState() {
+    getUserFromSP();
+    super.initState();
+  }
+
+  getUserFromSP() async {
+    UserPreference up = new UserPreference();
+    User usr = await up.getUser();
+    print(usr.toJson()['firstName']);
+    setState(() {
+      user = usr;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +70,7 @@ class DrawerBody extends StatelessWidget {
                             ),
                             SizedBox(width: 16.0,),
                             UserName(
-                              text: 'Andrea Charles',
+                              text: '${this.user?.firstName} ${this.user?.lastName}',
                             ),
                           ],)
                         ),
@@ -72,7 +98,10 @@ class DrawerBody extends StatelessWidget {
                         SizedBox(height: 33.5,),
                         DrawerProfileLink(
                           image: 'assets/images/profile_cart.png',
-                          title: 'Orders'
+                          title: 'Orders',
+                          onTap: () {
+                            Navigator.pushNamed(context, Orders.id);
+                          },
                         ),
                         SizedBox(height: 32.5,),
                         DrawerProfileLink(
@@ -167,9 +196,11 @@ class DrawerBody extends StatelessWidget {
           ]
         ),
       ),
+      
     );
   }
 }
+
 
 
 class DrawerProfileLink extends StatelessWidget {

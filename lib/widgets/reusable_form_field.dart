@@ -10,7 +10,9 @@ class ReusableTextFormField extends StatelessWidget {
      this.onSaved, 
      this.key,
      this.initialValue,
-     this.onChanged
+     this.onChanged,
+     this.prefixIcon,
+     this.keyboardType
   });
 
   final String hintText;
@@ -22,11 +24,13 @@ class ReusableTextFormField extends StatelessWidget {
   final Key key;
   final String initialValue;
   final Function onChanged;
+  final Widget prefixIcon;
+  final TextInputType keyboardType;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 47.0,
+      // height: 47.0,
       child: TextFormField(
         initialValue: initialValue,
         onChanged: onChanged,
@@ -34,9 +38,12 @@ class ReusableTextFormField extends StatelessWidget {
         controller: controller,
         onSaved: onSaved,
         validator: validator,
+        keyboardType: keyboardType,
         obscureText: hintText.contains('password') ? true : false,
         decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(vertical: 18.0),
           suffixIcon: suffixIcon,
+          prefixIcon: prefixIcon,
           hintText: hintText,
           hintStyle: TextStyle(
             color: Color(0XFFBABABA),

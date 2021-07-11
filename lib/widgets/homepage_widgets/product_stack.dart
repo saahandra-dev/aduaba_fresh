@@ -2,9 +2,13 @@ import 'package:aduaba_fresh/views/details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:favorite_button/favorite_button.dart';
 
-class BestSellingStack extends StatelessWidget {
-  BestSellingStack({this.image});
+class ProductStack extends StatelessWidget {
+  ProductStack({this.image, this.manufacturer, this.description, this.amount, this.instock});
   final String image;
+  final String manufacturer;
+  final String description;
+  final String amount;
+  final String instock;
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +23,12 @@ class BestSellingStack extends StatelessWidget {
             Container(
               width: 156.0,
               height: 156.0,
-              child: Image.asset(image),
+              child: Image.network(image,
+              fit: BoxFit.fill,
+              ),
             ),
             SizedBox(height: 8.0),
-            Text('Emmanuel Produce',
+            Text(manufacturer,
             style: TextStyle(
               fontSize: 10.0,
               fontWeight: FontWeight.w300
@@ -32,7 +38,7 @@ class BestSellingStack extends StatelessWidget {
             SizedBox(
               width: 156.0,
               height: 48.0,
-              child: Text('Herbsconnect Organic Acai Berry Powder Freeze Dried',
+              child: Text(description,
               style: TextStyle(
                 fontSize: 13.0,
                 fontWeight: FontWeight.w500,
@@ -43,7 +49,7 @@ class BestSellingStack extends StatelessWidget {
             SizedBox(height: 8.0),
 
             Row(children: [
-              Text('₦35,000.00',
+              Text(amount,
               style: TextStyle(
                 color: Color(0xFFF39E28),
                 fontSize: 13.0,
@@ -59,7 +65,7 @@ class BestSellingStack extends StatelessWidget {
               ),
               ),
               SizedBox(width: 4.0),
-              Text('In stock',
+              Text(instock,
               style: TextStyle(
                 color: Color(0xFF3A953C),
                 fontSize: 13.0,
@@ -80,10 +86,10 @@ class BestSellingStack extends StatelessWidget {
                 iconDisabledColor: Colors.white,
                 iconSize: 30.0,
                 valueChanged: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DetailsScreen()),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => DetailsScreen()),
+                  // );
                 },
               ),
             )

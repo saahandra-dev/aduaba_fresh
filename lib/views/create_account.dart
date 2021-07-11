@@ -1,5 +1,6 @@
 import 'dart:convert';
-
+import 'package:aduaba_fresh/models/user.dart';
+import 'package:aduaba_fresh/utils/user_preference.dart';
 import 'package:aduaba_fresh/views/homepage.dart';
 import 'package:aduaba_fresh/views/sign_in.dart';
 import 'package:aduaba_fresh/widgets/reusable_button_img.dart';
@@ -21,50 +22,51 @@ class _CreateAccountState extends State<CreateAccount> {
 
   final _formKey = GlobalKey<FormState>();
 
-  String firstName = '';
-
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _lastNameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmpasswordController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
 
-   Future<void> register() async {
+  Future<void> register() async {
+    if (_passwordController.text == _confirmpasswordController.text 
+        && _passwordController.text.isNotEmpty && _emailController.text.isNotEmpty
+        && _firstNameController.text.isNotEmpty && _lastNameController.text.isNotEmpty && _phoneController.text.isNotEmpty) {
 
-  if (_passwordController.text == _confirmpasswordController.text 
-      && _passwordController.text.isNotEmpty && _emailController.text.isNotEmpty
-      && firstName.isNotEmpty && _lastNameController.text.isNotEmpty) {
-
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      duration: Duration(seconds: 1),
-      content: Text("Authenticating")));
-    var response = await http.post(Uri.parse("https://teamaduaba.azurewebsites.net/register"), 
-        body: jsonEncode({
-          "email": _emailController.text,
-          "password": _passwordController.text,
-          "firstName": firstName,
-          "lastName": _lastNameController.text
-          }),
-        headers: {
-          "Register":"application/json",
-          "Content-Type":"application/json"
-        }
-          );
-          if(response.statusCode == 200) {
-            
-            Navigator.pushNamed(context, HomePage.id);
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid Credentials")));
-            print(response.body);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        duration: Duration(seconds: 1),
+        content: Text("Authenticating")));
+      var response = await http.post(Uri.parse("https://teamaduaba.azurewebsites.net/Register"), 
+          body: jsonEncode({
+            "email": _emailController.text,
+            "password": _passwordController.text,
+            "firstName": _firstNameController.text,
+            "lastName": _lastNameController.text,
+            "phoneNumber": _phoneController.text
+            }),
+          headers: {
+            "Register":"application/json",
+            "Content-Type":"application/json"
           }
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 
-    Padding(
-      padding: const EdgeInsets.only(left: 30.0),
-      child: Text("Fields cannot be blank"),
-    )));
+            );
+            if(response.statusCode == 200) {
+              Map<String, dynamic> decoded = json.decode(response.body);
+              User user = User.fromJson(decoded);
+              UserPreference.saveUser(user);
+              Navigator.pushNamed(context, HomePage.id);
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid Credentials")));
+              // print(response.body);
+            }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 
+      Padding(
+        padding: const EdgeInsets.only(left: 30.0),
+        child: Text("Fields cannot be blank"),
+      )));
+    }
   }
-}
 
   // @override 
   // void initState() {
@@ -158,15 +160,9 @@ class _CreateAccountState extends State<CreateAccount> {
                         ),
                         SizedBox(height: 16.0,),
                         ReusableTextFormField(
-                          onChanged: (value) {
-                            setState(() {
-                              firstName = value;
-                            });
-                          },
-                      
-                          // controller: _firstNameController,
+                          keyboardType: TextInputType.name,
+                          controller: _firstNameController,
                           onSaved: (String firstName) {
-                            // print(firstName);
                           },
                           hintText: 'Enter first name',
                           validator: (value) {
@@ -182,6 +178,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         ),
                         SizedBox(height: 16.0,),
                         ReusableTextFormField(
+                          keyboardType: TextInputType.name,
                           controller: _lastNameController,
                           hintText: 'Enter last name',
                           validator: (value) {
@@ -193,10 +190,36 @@ class _CreateAccountState extends State<CreateAccount> {
                         ),
                         SizedBox(height: 24.0,),
                         TextFormFieldLabel(
+                          text: 'Phone Number',
+                        ),
+                        SizedBox(height: 16.0,),
+                        ReusableTextFormField(
+                          prefixIcon: Padding(
+                            padding: const EdgeInsets.only(top:14.0),
+                            child: Text('+234',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Color(0XFFBABABA)
+                            ),
+                            ),
+                          ),
+                          keyboardType: TextInputType.number,
+                          controller: _phoneController,
+                          hintText: '',
+                          validator: (value) {
+                            if (value.length != 10)
+                                return 'Mobile Number must be of 10 digit';
+                              else
+                                return null;
+                            }
+                        ),
+                        SizedBox(height: 24.0,),
+                        TextFormFieldLabel(
                           text: 'Email Address',
                         ),
                         SizedBox(height: 16.0,),
                         ReusableTextFormField(
+                          keyboardType: TextInputType.emailAddress,
                           controller: _emailController,
                           hintText: 'Enter email address',
                           validator: (val) => val.isEmpty || !val.contains('@') || !val.contains('.')
@@ -209,6 +232,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         ),
                         SizedBox(height: 16.0,),
                         ReusableTextFormField(
+                          keyboardType: TextInputType.emailAddress,
                           controller: _passwordController,
                           hintText: 'Enter password',
                           validator:  (value) {

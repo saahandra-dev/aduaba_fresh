@@ -1,20 +1,18 @@
+
 import 'package:aduaba_fresh/views/selected_category.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesCard extends StatelessWidget {
-  CategoriesCard({this.title, this.boxColor, this.textColor});
+  CategoriesCard({this.title, this.boxColor, this.textColor, this.widget});
 
   final String title;
   final Color boxColor;
   final Color textColor;
+  final Widget widget;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.pushNamed(context, SelectedCategory.id);
-      },
-      child: Container(
+     return Container(
         margin: EdgeInsets.only(right: 8.0),
         width: 92,
         height: 50,
@@ -31,7 +29,7 @@ class CategoriesCard extends StatelessWidget {
           ),
           ),
         ),
-      ),
-    );
+      );
+    
   }
 }

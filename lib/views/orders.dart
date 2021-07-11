@@ -41,10 +41,10 @@ class _OrdersState extends State<Orders> {
             label: 'search',
             icon: InkWell(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DiscoverScreen()),
-                  );
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(builder: (context) => DiscoverScreen()),
+                //   );
                 // Navigator.pushNamed(context, AccountDetails.id);
               },
               child: Icon(Icons.search))

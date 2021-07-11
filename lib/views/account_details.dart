@@ -1,3 +1,5 @@
+import 'package:aduaba_fresh/models/user.dart';
+import 'package:aduaba_fresh/utils/user_preference.dart';
 import 'package:aduaba_fresh/views/edit_user_profile.dart';
 import 'package:aduaba_fresh/views/homepage.dart';
 import 'package:aduaba_fresh/views/orders.dart';
@@ -9,9 +11,32 @@ import 'package:aduaba_fresh/widgets/reusable_button_no_img.dart';
 import 'package:aduaba_fresh/widgets/reusable_box_header.dart';
 import 'package:flutter/material.dart';
 
-class AccountDetails extends StatelessWidget {
+class AccountDetails extends StatefulWidget {
   const AccountDetails({ Key key }) : super(key: key);
   static String id = 'account_details';
+
+  @override
+  _AccountDetailsState createState() => _AccountDetailsState();
+}
+
+class _AccountDetailsState extends State<AccountDetails> {
+  
+  User user;
+
+  @override
+  void initState() {
+    getUserFromSP();
+    super.initState();
+  }
+
+  getUserFromSP() async {
+    UserPreference up = new UserPreference();
+    User usr = await up.getUser();
+    print(usr.toJson()['firstName']);
+    setState(() {
+      user = usr;
+    });
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -48,15 +73,15 @@ class AccountDetails extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                     UserName(
-                      text: 'Andrea Charles',
+                      text: '${this.user?.firstName} ${this.user?.lastName}',
                     ),
                     SizedBox(height: 8.0,),
                     UserContactDetails(
-                      text: 'Andrea_charles@gmail.com',
+                      text: '${this.user?.email}',
                     ),
                     SizedBox(height: 8.0,),
                     UserContactDetails(
-                      text: '+234 809 202 3024',
+                      text: '${this.user?.phoneNumber}',
                     )
                   ],),
                   SizedBox(width: 71.0,),

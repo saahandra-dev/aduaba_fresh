@@ -17,6 +17,8 @@ class WishList extends StatefulWidget {
 class _WishListState extends State<WishList> {
 
   
+
+  
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -42,10 +44,10 @@ class _WishListState extends State<WishList> {
               label: 'search',
               icon: InkWell(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DiscoverScreen()),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => DiscoverScreen()),
+                  // );
                   // Navigator.pushNamed(context, AccountDetails.id);
                 },
                 child: Icon(Icons.search))

@@ -38,10 +38,10 @@ class _ShippingDetailsState extends State<ShippingDetails> {
               label: 'search',
               icon: InkWell(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DiscoverScreen()),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => DiscoverScreen()),
+                  // );
                 },
                 child: Icon(Icons.search))
               ),
