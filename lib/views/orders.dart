@@ -1,9 +1,14 @@
+import 'dart:convert';
+
+import 'package:aduaba_fresh/models/product.dart';
 import 'package:aduaba_fresh/views/account_details.dart';
 import 'package:aduaba_fresh/views/discover/discover_screen.dart';
 import 'package:aduaba_fresh/views/homepage.dart';
 import 'package:aduaba_fresh/views/order_summary.dart';
+import 'package:aduaba_fresh/widgets/bottom_nav.dart';
 import 'package:aduaba_fresh/widgets/reusable_button_no_img.dart';
 import 'package:aduaba_fresh/widgets/reusable_box_header.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class Orders extends StatefulWidget {
@@ -15,60 +20,30 @@ class Orders extends StatefulWidget {
 }
 
 class _OrdersState extends State<Orders> {
+
+
+ List<Product> orderList = [];
+
+  void getWishList() async {
+    var response = await http.get(Uri.parse("https://teamaduaba.azurewebsites.net/OrderStatus"));
+
+    if (response.statusCode == 200) {
+      // print(response.body);
+      List<dynamic> decoded = json.decode(response.body);
+      setState(() {
+      orderList = decoded.map((e) => Product.fromJson(e)).toList();
+
+      });
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        iconSize: 35,
-        selectedItemColor: Colors.green,
-        unselectedItemColor: Color(0xFFDEDEDE),
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        items: [
-          BottomNavigationBarItem(
-            label: 'home',
-            icon: InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, HomePage.id);
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(left: 50.0),
-                child: Icon(Icons.home_outlined),
-              ))
-            ),
-            BottomNavigationBarItem(
-            label: 'search',
-            icon: InkWell(
-              onTap: () {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(builder: (context) => DiscoverScreen()),
-                //   );
-                // Navigator.pushNamed(context, AccountDetails.id);
-              },
-              child: Icon(Icons.search))
-            ),
-            BottomNavigationBarItem(
-            label: 'option',
-            icon: InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, AccountDetails.id);
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(right: 50.0),
-                child: Icon(Icons.more_horiz),
-              ))
-            ),
-        ],
-        // currentIndex: selectedIndex,
-        // onTap: _onItemTapped,
-
-        
-      ),
-
-
-      body: Padding(
+      bottomNavigationBar: ReusableBottomNav(),
+      appBar:  PreferredSize(
+        preferredSize: Size(double.infinity, 142.0),
+        child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(children: [
           ReusableBoxHeader(
@@ -91,19 +66,11 @@ class _OrdersState extends State<Orders> {
               ],
             ),
           ),
-          Expanded(child: wishListBody())
-          ],),
-      ),
-    );
-  }
-}
-
-
-
-wishListBody() {
-      var wishList = [];
-      return wishList.isNotEmpty ? ListView.builder(
-        itemCount: wishList.length,
+        ]),
+        )),
+      body: orderList.length > 0 ?
+      ListView.builder(
+        itemCount: orderList.length,
         itemBuilder: (context, index) {
           return  GestureDetector(
             onTap: () {
@@ -135,21 +102,21 @@ wishListBody() {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          WishlistBuilderText(
+                          OrderlistBuilderText(
                             text: 'Order #: 341924186',
                             color: Color(0xFF000000),
                             fontSize: 15.0,
                             fontWeight: FontWeight.w400,
                           ),
                           SizedBox(height: 5.0,),
-                          WishlistBuilderText(
+                          OrderlistBuilderText(
                             text: 'On 22 January, 2020 1:15 pm ',
                             color: Color(0xFFBBBBBB),
                             fontSize: 13.0,
                             fontWeight: FontWeight.w400,
                           ),
                           SizedBox(height: 21.0,),
-                          WishlistBuilderText(
+                          OrderlistBuilderText(
                             text: 'Estimated Delivery Date on 21 Dec',
                             color: Color(0xFFF2902F),
                             fontSize: 15.0,
@@ -163,8 +130,7 @@ wishListBody() {
             )
           ); 
         }
-        )  
-        :Container(     
+        ): Container(     
           padding: EdgeInsets.only(bottom: 45.0),
           child: Center(
             child: Column(
@@ -201,13 +167,20 @@ wishListBody() {
               ],
             ),
           ),
-        );  
-    }
+        )
+   
+   
+   
+    );
+     
+  }
+}
 
 
 
-class WishlistBuilderText extends StatelessWidget {
-  WishlistBuilderText({this.text, this.color, this.fontSize, this.fontWeight});
+
+class OrderlistBuilderText extends StatelessWidget {
+  OrderlistBuilderText({this.text, this.color, this.fontSize, this.fontWeight});
 
   final String text;
   final Color color;

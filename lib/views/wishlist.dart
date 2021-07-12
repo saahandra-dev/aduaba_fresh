@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:aduaba_fresh/models/product.dart';
 import 'package:aduaba_fresh/views/account_details.dart';
 import 'package:aduaba_fresh/views/discover/discover_screen.dart';

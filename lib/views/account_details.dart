@@ -5,11 +5,14 @@ import 'package:aduaba_fresh/views/homepage.dart';
 import 'package:aduaba_fresh/views/orders.dart';
 import 'package:aduaba_fresh/views/payment_card.dart';
 import 'package:aduaba_fresh/views/shipping_details.dart';
+import 'package:aduaba_fresh/views/sign_in.dart';
+import 'package:aduaba_fresh/views/splash_screen.dart';
 import 'package:aduaba_fresh/views/wishlist.dart';
 import 'package:aduaba_fresh/widgets/homepage_widgets/user_name.dart';
 import 'package:aduaba_fresh/widgets/reusable_button_no_img.dart';
 import 'package:aduaba_fresh/widgets/reusable_box_header.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountDetails extends StatefulWidget {
   const AccountDetails({ Key key }) : super(key: key);
@@ -37,6 +40,13 @@ class _AccountDetailsState extends State<AccountDetails> {
       user = usr;
     });
   }
+
+  void logoutUser() async{
+SharedPreferences prefs = await SharedPreferences.getInstance();
+prefs?.clear();
+ Navigator.of(context)
+    .pushNamedAndRemoveUntil(SignIn.id, (Route<dynamic> route) => false);
+}
   
   @override
   Widget build(BuildContext context) {
@@ -57,16 +67,20 @@ class _AccountDetailsState extends State<AccountDetails> {
             child: Column(children: [
               SizedBox(height: 48.0,),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                Container(
-                  height: 60.0,
-                  width: 60.0,
-                  child: CircleAvatar(
-                    // backgroundColor: Colors.yellow,
-                    child: Image.asset('assets/images/acc_profile.png'),
-                  )
-                  ),
+                Row(
+                  children: [
+                    Container(
+                      height: 60.0,
+                      width: 60.0,
+                      child: CircleAvatar(
+                        // backgroundColor: Colors.yellow,
+                        child: Image.asset('assets/images/acc_profile.png'),
+                      )
+                      ),
+                  
                   SizedBox(width: 16.0,),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -84,7 +98,9 @@ class _AccountDetailsState extends State<AccountDetails> {
                       text: '${this.user?.phoneNumber}',
                     )
                   ],),
-                  SizedBox(width: 71.0,),
+                  ],
+                ),
+                  // SizedBox(width: 71.0,),
                   GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, EditUserProfile.id);
@@ -130,7 +146,9 @@ class _AccountDetailsState extends State<AccountDetails> {
                 text: 'Log-Out',
                 primary: Color(0xFFBB2F48),
                 color: Colors.white,
-                onpressed: () {},
+                onpressed: () {
+                  logoutUser();
+                },
               ),
             ],),
             ),
