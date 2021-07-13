@@ -1,14 +1,15 @@
+import 'dart:convert';
+import 'package:aduaba_fresh/models/product.dart';
 import 'package:aduaba_fresh/views/account_details.dart';
 import 'package:aduaba_fresh/views/discover/discover_screen.dart';
-import 'package:aduaba_fresh/views/homepage.dart';
+import 'package:aduaba_fresh/widgets/bottom_nav.dart';
 import 'package:aduaba_fresh/widgets/reusable_button_no_img.dart';
 import 'package:aduaba_fresh/widgets/reusable_box_header.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class WishList extends StatefulWidget {
-  // WishList({ Key key }) : super(key: key);
   static String id = 'wishlist';
-  final wishList = [];
 
   @override
   _WishListState createState() => _WishListState();
@@ -16,59 +17,36 @@ class WishList extends StatefulWidget {
 
 class _WishListState extends State<WishList> {
 
-  
+  @override
+  void initState() {
+    
+    getWishList();
+
+    super.initState();
+  }
+
+  List<Product> wishList = [];
+
+  void getWishList() async {
+    var response = await http.get(Uri.parse("https://teamaduaba.azurewebsites.net/GetCustomerWishList"));
+
+    if (response.statusCode == 200) {
+      // print(response.body);
+      List<dynamic> decoded = json.decode(response.body);
+      setState(() {
+      wishList = decoded.map((e) => Product.fromJson(e)).toList();
+
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-          iconSize: 35,
-          selectedItemColor: Colors.green,
-          unselectedItemColor: Color(0xFFDEDEDE),
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          items: [
-            BottomNavigationBarItem(
-              label: 'home',
-              icon: InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, HomePage.id);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 50.0),
-                  child: Icon(Icons.home_outlined),
-                ))
-              ),
-              BottomNavigationBarItem(
-              label: 'search',
-              icon: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DiscoverScreen()),
-                  );
-                  // Navigator.pushNamed(context, AccountDetails.id);
-                },
-                child: Icon(Icons.search))
-              ),
-              BottomNavigationBarItem(
-              label: 'option',
-              icon: InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, AccountDetails.id);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 50.0),
-                  child: Icon(Icons.more_horiz),
-                ))
-              ),
-          ],
-          // currentIndex: selectedIndex,
-          // onTap: _onItemTapped,
-
-          
-        ),
-
-      body: Padding(
+      bottomNavigationBar: ReusableBottomNav(),
+      appBar: PreferredSize(
+        preferredSize: Size(double.infinity, 142.0),
+        child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 0),
         child: Column(children: [
           ReusableBoxHeader(
@@ -90,19 +68,13 @@ class _WishListState extends State<WishList> {
                 ),
               ],
             ),
-          ),
-          Expanded(child: wishListBody())
+          ),  
           ],),
+        ),
       ),
-    );
-  }
-}
 
-
-
-wishListBody() {
-      var wishList = [];
-      return wishList.isNotEmpty ? ListView.builder(
+      body: wishList.length > 0 ?
+      ListView.builder(
         itemCount: wishList.length,
         itemBuilder: (context, index) {
           return  GestureDetector(
@@ -124,7 +96,7 @@ wishListBody() {
                   Container(
                     width: 75.0,
                     height: 78.0,
-                    child: Image.asset('assets/images/wishlist_image.png'),
+                    child: Image.network(wishList[index].shortDescription,),
                   ),
                   SizedBox(width: 16.0,),
                   Expanded(
@@ -175,7 +147,6 @@ wishListBody() {
                       ]),
                     ),
                   ),
-
                   IconButton(
                     icon: Icon(Icons.delete), 
                     onPressed: () {}
@@ -183,9 +154,8 @@ wishListBody() {
               ],),
             )
           ); 
-        }
-        )  
-        :Container(     
+        }  
+        ): Container(     
           padding: EdgeInsets.only(bottom: 45.0),
           child: Center(
             child: Column(
@@ -212,23 +182,27 @@ wishListBody() {
                 ),
                 ),
                 Spacer(),
-                ReusableButtonNoImg(
-                  text: 'Discover products',
-                  fontsize: 16.0,
-                  fontweight: FontWeight.w700,
-                  onpressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => DiscoverScreen()),
-                    // );
-                  },
-                  primary: Color(0xFF3A953C),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: ReusableButtonNoImg(
+                    text: 'Discover products',
+                    fontsize: 16.0,
+                    fontweight: FontWeight.w700,
+                    onpressed: () {
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => DiscoverScreen()),
+                      // );
+                    },
+                    primary: Color(0xFF3A953C),
+                  ),
                 )
               ],
             ),
           ),
-        );  
+        ));  
     }
+}
 
 
 

@@ -1,5 +1,5 @@
-
 import 'package:aduaba_fresh/utils/user_preference.dart';
+import 'package:aduaba_fresh/views/admin.dart';
 import 'package:aduaba_fresh/views/categories.dart';
 import 'package:aduaba_fresh/views/checkout_payment.dart';
 import 'package:aduaba_fresh/views/edit_user_profile.dart';
@@ -58,7 +58,7 @@ class AduabaFresh extends StatelessWidget {
         PaymentCard.id: (context) => PaymentCard(),
         CheckoutPayment.id: (context) => CheckoutPayment(),
         ShippingDetails.id: (context) => ShippingDetails(),
-        
+        AdminScreen.id: (context) => AdminScreen(),
       }
     );
   }

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:aduaba_fresh/models/product.dart';
-import 'package:aduaba_fresh/models/products_marks.dart';
 
-class ItemCard extends StatelessWidget {
-  final Product product;
+class ItemCard extends StatelessWidget { 
+  ItemCard({this.image, this.name, this.description, this.amount, this.instock, this.longDescription, this.press});
+  final String image;
+  final String name;
+  final String description;
+  final String amount;
+  final String instock;
+  final String longDescription;
   final Function press;
-  const ItemCard({
-    Key key,
-    this.product,
-    this.press,
-  }) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +26,9 @@ class ItemCard extends StatelessWidget {
               // height: 180,
               // width: 160,
               decoration: BoxDecoration(
-                color: product.color,
                 borderRadius: BorderRadius.circular(5),     
                 image: DecorationImage(
-                  image: AssetImage(product.image),
+                  image: NetworkImage(image),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -52,7 +51,7 @@ class ItemCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Text(
               // products is out demo list
-              product.title,
+              name,
               style: TextStyle(color: Color(0xFF819272), fontSize: 10, fontWeight: FontWeight.w300, fontStyle: FontStyle.normal),
             ),
           ),
@@ -60,7 +59,7 @@ class ItemCard extends StatelessWidget {
           Padding(
             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
             child: Text(
-              product.description,
+              description,
               style: TextStyle(color: Color(0xFF000000), fontSize: 13, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal, letterSpacing: 0.3),
             ),  
           ),
@@ -68,7 +67,7 @@ class ItemCard extends StatelessWidget {
           Row(
             children: [
             Text(
-              "\₦${product.price}",
+              "\₦${amount}",
               style: TextStyle(color: Color(0xFFF39E28), fontSize: 13, fontWeight: FontWeight.w700, fontStyle: FontStyle.normal),
             ),
             Padding(
@@ -85,7 +84,7 @@ class ItemCard extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(left: 20),
               child: Text(
-                product.status,
+                instock,
                 style: TextStyle(color: Color(0xFF3A953C), fontSize: 13, fontWeight: FontWeight.w400, fontStyle: FontStyle.normal),
               ),
             ),],

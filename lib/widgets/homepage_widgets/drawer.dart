@@ -1,13 +1,38 @@
+import 'package:aduaba_fresh/models/user.dart';
+import 'package:aduaba_fresh/utils/user_preference.dart';
 import 'package:aduaba_fresh/views/categories.dart';
 import 'package:aduaba_fresh/views/account_details.dart';
+import 'package:aduaba_fresh/views/orders.dart';
 import 'package:aduaba_fresh/views/wishlist.dart';
 import 'package:aduaba_fresh/widgets/homepage_widgets/user_name.dart';
 import 'package:flutter/material.dart';
 
-class DrawerBody extends StatelessWidget {
-  const DrawerBody({
-    Key key,
-  }) : super(key: key);
+
+class DrawerBody extends StatefulWidget {
+  const DrawerBody({ Key key }) : super(key: key);
+
+  @override
+  _DrawerBodyState createState() => _DrawerBodyState();
+}
+
+class _DrawerBodyState extends State<DrawerBody> {
+
+  User user;
+
+  @override
+  void initState() {
+    getUserFromSP();
+    super.initState();
+  }
+
+  getUserFromSP() async {
+    UserPreference up = new UserPreference();
+    User usr = await up.getUser();
+    setState(() {
+      user = usr;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +63,13 @@ class DrawerBody extends StatelessWidget {
                               height: 40.0,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(100.0),
-                                color: Colors.grey
+                                color: Color(0xFF3A953C).withOpacity(0.1)
                               ),
-                              child: Image.asset('assets/images/profile_picture.png'),
+                              child: Image.asset('assets/images/person.png'),
                             ),
                             SizedBox(width: 16.0,),
                             UserName(
-                              text: 'Andrea Charles',
+                              text: '${this.user?.firstName} ${this.user?.lastName}',
                             ),
                           ],)
                         ),
@@ -72,7 +97,10 @@ class DrawerBody extends StatelessWidget {
                         SizedBox(height: 33.5,),
                         DrawerProfileLink(
                           image: 'assets/images/profile_cart.png',
-                          title: 'Orders'
+                          title: 'Orders',
+                          onTap: () {
+                            Navigator.pushNamed(context, Orders.id);
+                          },
                         ),
                         SizedBox(height: 32.5,),
                         DrawerProfileLink(
@@ -149,27 +177,31 @@ class DrawerBody extends StatelessWidget {
               ),
             ),
           ),
-          // Positioned(
-          //   top: 260.0,
-          //   right: 0.0,
-          //   child: Container(
-          //     width: 32.0,
-          //     height: 32.0,
-          //     decoration: BoxDecoration(
-          //       borderRadius: BorderRadius.circular(100.0),
-          //       color: Colors.black
-          //     ),
-          //     child: Icon(Icons.close,
-          //     color: Colors.white,
-          //     )
-          //     ),
-          // )
+        //   Positioned(
+        //     left: MediaQuery.of(context).size.width/2,
+        // top: MediaQuery.of(context).size.height/2,
+        // right: MediaQuery.of(context).size.width/2,
+        // bottom: MediaQuery.of(context).size.height/2,
+        //     child: Container(
+        //       width: 32.0,
+        //       height: 32.0,
+        //       decoration: BoxDecoration(
+        //         borderRadius: BorderRadius.circular(100.0),
+        //         color: Colors.black
+        //       ),
+        //       child: Icon(Icons.close,
+        //       color: Colors.white,
+        //       )
+        //       ),
+        //   )
           ]
         ),
       ),
+      
     );
   }
 }
+
 
 
 class DrawerProfileLink extends StatelessWidget {
@@ -180,19 +212,24 @@ class DrawerProfileLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Row(children: [
-        Image.asset(image),
-        SizedBox(width: 19.3,),
-        Text(title,
-        style: TextStyle(
-          fontSize: 17.0,
-          fontWeight: FontWeight.w400,
-          color: Color(0xFF10151A)
+    return Container(
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          height: 23.0,
+          child: Row(children: [
+            Image.asset(image),
+            SizedBox(width: 19.3,),
+            Text(title,
+            style: TextStyle(
+              fontSize: 17.0,
+              fontWeight: FontWeight.w400,
+              color: Color(0xFF10151A)
+            ),
+            ),
+          ],),
         ),
-        ),
-      ],),
+      ),
     );
   }
 }

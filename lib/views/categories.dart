@@ -1,20 +1,51 @@
+import 'dart:convert';
+import 'package:aduaba_fresh/models/category.dart';
 import 'package:aduaba_fresh/views/account_details.dart';
 import 'package:aduaba_fresh/views/discover/discover_screen.dart';
 import 'package:aduaba_fresh/views/homepage.dart';
 import 'package:aduaba_fresh/views/selected_category.dart';
 import 'package:aduaba_fresh/widgets/reusable_page_title.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-
-
-class Categories extends StatelessWidget {
-  const Categories({ Key key}) : super(key: key);
+class Categories extends StatefulWidget {
+  const Categories({ Key key }) : super(key: key);
   static String id = 'categories';
+
+  @override
+  _CategoriesState createState() => _CategoriesState();
+}
+
+class _CategoriesState extends State<Categories> {
+  
+
+  List<Category> category = [];
+
+  void getCategory() async {
+    var response = await http.get(Uri.parse("https://teamaduaba.azurewebsites.net/categories"));
+
+    if (response.statusCode == 200) {
+      List<dynamic> decoded = json.decode(response.body);
+      
+      setState(() { 
+      category = decoded.map((e) => Category.fromJson(e)).toList();
+      });
+     
+    // print(response.body);
+    }
+  }
+
+  // @override
+  // void initState() {
+  //   getCategory();
+  //   super.initState();
+  // }
 
   
 
   @override
   Widget build(BuildContext context) {
+    getCategory();
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
           iconSize: 35,
@@ -38,10 +69,10 @@ class Categories extends StatelessWidget {
               label: 'search',
               icon: InkWell(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DiscoverScreen()),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => DiscoverScreen()),
+                  // );
                   // Navigator.pushNamed(context, AccountDetails.id);
                 },
                 child: Icon(Icons.search))
@@ -95,7 +126,7 @@ class Categories extends StatelessWidget {
                     ),
                 ],),
                 SizedBox(height: 19.0,),
-                Text('23 Categories',
+                Text('${category.length} Categories',
                 style: TextStyle(
                   color: Color(0xFFBBBBBB),
                   fontWeight: FontWeight.w400,
@@ -112,15 +143,17 @@ class Categories extends StatelessWidget {
             // elevation: 1,
             color: Color(0xFFF5F5F5).withOpacity(1),
             child: ListView.builder(
-              itemCount: 7,
+              itemCount: category.length,
               itemBuilder: (context, index) {
-                return Padding(
+                return Container(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0,),
                   child: InkWell(
-                    // splashColor: Colors.red,
-                    // radius: 5,
                     onTap: () {
-                      Navigator.pushNamed(context, SelectedCategory.id);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SelectedCategory(category: category[index]))
+                      );
+                      // Navigator.pushNamed(context, SelectedCategory.id);
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -146,13 +179,13 @@ class Categories extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Raw Fruits',
+                              Text(category[index]?.name,
                               style: TextStyle(
                                 fontSize: 15.0,
                                 fontWeight: FontWeight.w700
                               ),
                               ),
-                              Text('234 items',
+                              Text('',
                               style: TextStyle(
                                 fontSize: 13.0,
                                 fontWeight: FontWeight.w400,

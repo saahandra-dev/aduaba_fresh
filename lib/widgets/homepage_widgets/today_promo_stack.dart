@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class TodayPromoStack extends StatelessWidget {
   const TodayPromoStack({
-    Key key,
-  }) : super(key: key);
+    this.productBrand
+  });
+  final String productBrand;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class TodayPromoStack extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Organic Brands',
+                          Text(productBrand,
                           style: TextStyle(
                             fontSize: 10.0,
                             fontWeight: FontWeight.w700,

@@ -1,22 +1,44 @@
+import 'dart:convert';
+
 import 'package:aduaba_fresh/models/product.dart';
-import 'package:aduaba_fresh/models/products_marks.dart';
+
 import 'package:aduaba_fresh/views/details_screen.dart';
 import 'package:aduaba_fresh/views/discover/search_bar/pk_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 
+import 'package:http/http.dart' as http;
+
+
 
 class SearchScreen extends StatefulWidget {
 
-  final List<Product> productsList;
+  final List<Product> product;
   @override
   _SearchScreenState createState() => _SearchScreenState();
 
-  const SearchScreen(this.productsList);
+  const SearchScreen(this.product);
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+
+  List<Product> product = [];
+
+  void getProduct() async {
+    var response = await http.get(Uri.parse("https://teamaduaba.azurewebsites.net/getProducts"));
+
+    if (response.statusCode == 200) {
+      List<dynamic> decoded = json.decode(response.body);
+      List<Product> product = decoded.map((e) => Product.fromJson(e)).toList();
+      
+      /*setState(() { 
+      product = allproduct;
+      });*/
+     
+    // print(response.body);
+    }
+  }
 
   @override
   void initState() {
@@ -26,6 +48,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    getProduct();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     return Scaffold(
       
@@ -63,7 +86,7 @@ class _SearchScreenState extends State<SearchScreen> {
       shrinkWrap: true,
       mainAxisSpacing: 5,
       crossAxisSpacing: 5,
-      suggestions: widget.productsList,
+      suggestions: widget.product,
       //cancellationWidget: Text("Cancel"),
       minimumChars: 1,
 //      placeHolder: Center(
@@ -122,14 +145,20 @@ class _SearchScreenState extends State<SearchScreen> {
                 onPressed: (){}
               ),
               title: Text(
-                product.title,
+                product.name,
                 maxLines: 1,
               ),
               onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => DetailsScreen(
-                          product: ProductsMock.productsList[index],
+                          image: product.imageUrl,
+                          name: product.name,
+                          description: product.shortDescription,
+                          amount: product.amount.toString(),
+                          instock: product.inStock.toString(),
+                          longDescription: product.longDescription,
+                          
                         ),
                       ),
                     ),          
@@ -152,17 +181,17 @@ class _SearchScreenState extends State<SearchScreen> {
                 onPressed: (){}
               ),
               title: Text(
-                product.title,
+                product.name,
                 maxLines: 1,
               ),
-              onTap: () => Navigator.push(
+              onTap: () {}/*=> Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => DetailsScreen(
-                          product: ProductsMock.productsList[index],
+                          product: product,
                         ),
                       ),
-                    ),          
+                    ),*/          
             ),
           ),
       ],
@@ -182,17 +211,17 @@ class _SearchScreenState extends State<SearchScreen> {
                 onPressed: (){}
               ),
               title: Text(
-                product.title,
+                product.name,
                 maxLines: 1,
               ),
-              onTap: () => Navigator.push(
+              onTap: () {} /*=> Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => DetailsScreen(
-                          product: ProductsMock.productsList[index],
+                          product: product,
                         ),
                       ),
-                    ),          
+                    ),*/          
             ),
           ),
       ],
@@ -230,11 +259,11 @@ class _SearchScreenState extends State<SearchScreen> {
     if (search == "error") throw Error();
     List<Product> filterProductList = [];
 
-    widget.productsList.forEach((Product) {
-      if (Product.description
+    widget.product.forEach((Product) {
+      if (Product.shortDescription
           .toLowerCase()
           .contains(search.toLowerCase()) ||
-          Product.title
+          Product.name
               .toLowerCase()
               .contains(search.toLowerCase()))
         filterProductList.add(Product);
@@ -250,18 +279,18 @@ class _SearchScreenState extends State<SearchScreen> {
     if (search == "error") throw Error();
     List<Product> filterProductList = [];
 
-    widget.productsList.forEach((Product) {
-      if (Product.description
+    widget.product.forEach((Product) {
+      if (Product.shortDescription
           .toLowerCase()
           .contains(search.toLowerCase()) ||
-          Product.title
+          Product.name
               .toLowerCase()
               .contains(search.toLowerCase()))
         filterProductList.add(Product);
     });
 
     final suggestionList =
-    search.isEmpty ? widget.productsList : filterProductList;
+    search.isEmpty ? widget.product : filterProductList;
 
     return suggestionList;
   }

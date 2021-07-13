@@ -134,7 +134,44 @@ class _ResetPasswordState extends State<ResetPassword> {
     ),
     SizedBox(height: 24.0,),
     ReusableButtonNoImg(
-      onpressed: () {},
+      onpressed: () {
+        showDialog(
+              context: context, 
+              builder: (context) {
+                return Dialog(
+                  shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                elevation: 0,
+                    child: SingleChildScrollView(
+                      child: Container(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+                        child: Column(children: [
+                          Text('Your Password has \nbeen reset',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF10151A)
+                          ),
+                          ),
+                          SizedBox(height: 32.0,),
+                          ReusableButtonNoImg(
+                            text: 'Sign in',
+                            primary: Color(0xFF3A953C),
+                            onpressed: () {
+                              
+                            },
+                          )
+                        ],),
+                      ),
+                  ),
+                    ),
+                );
+              }
+            );
+      },
       primary: Color(0XFF3A953C),
       text: 'Save password',
       fontweight: FontWeight.w700,

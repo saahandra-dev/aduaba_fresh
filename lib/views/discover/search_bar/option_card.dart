@@ -16,26 +16,34 @@ class OptionCard extends StatelessWidget {
       onTap: press,
       child: Container(
         padding: EdgeInsets.only(left:10, right: 10, bottom: 20),
-        child: Column(
+          child: Column(
           children: <Widget>[
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 SizedBox(
-                  height: 80.0,
-                  width: 100.0, // fixed width and height
-                  child: Image.asset(product.image),
+                  height: 80,
+                  width: 100,
+                  child: Container(
+                  padding: EdgeInsets.all(0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    image: DecorationImage( 
+                      image: NetworkImage(product.imageUrl),
+                      fit: BoxFit.cover,  
+                    ),
+                  ),),
                 ),
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.only(left: 0),
+                    padding: EdgeInsets.only(left: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 0),
                               child: Text(
-                                product.description,
+                                product.shortDescription,
                                 style: TextStyle(
                                   color: Color(0xFF000000), 
                                   fontSize: 15, 
@@ -49,7 +57,7 @@ class OptionCard extends StatelessWidget {
                             Padding(
                             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                             child: Text(
-                            product.title,
+                            product.name,
                             style: TextStyle(
                               color: Color(0xFF819272), 
                               fontSize: 13, 
@@ -62,7 +70,7 @@ class OptionCard extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  "\₦${product.price}",
+                                  "\₦${product.amount}",
                                   style: TextStyle(
                                     color: Color(0xFFF39E28), 
                                     fontSize: 13, 
@@ -84,7 +92,7 @@ class OptionCard extends StatelessWidget {
                                 Padding(
                                   padding: EdgeInsets.only(left: 20),
                                   child: Text(
-                                    product.status,
+                                    product.inStock ? 'true' : 'false',
                                     style: TextStyle(
                                       color: Color(0xFF3A953C), 
                                       fontSize: 15, 
@@ -102,8 +110,8 @@ class OptionCard extends StatelessWidget {
                   ],
                 ),
               ],
+          ),
         ),
-      ),
     );
   }
 }

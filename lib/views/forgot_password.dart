@@ -1,3 +1,5 @@
+import 'package:aduaba_fresh/models/user.dart';
+import 'package:aduaba_fresh/utils/user_preference.dart';
 import 'package:aduaba_fresh/views/sign_in.dart';
 import 'package:aduaba_fresh/widgets/email_bottomsheet.dart';
 import 'package:aduaba_fresh/widgets/reusable_button_no_img.dart';
@@ -15,6 +17,24 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   int _value = 0;
   int _smsValue = 1;
   int _emailValue = 2;
+
+  User user;
+
+  @override
+  void initState() {
+    getUserFromSP();
+    super.initState();
+  }
+
+  getUserFromSP() async {
+    UserPreference up = new UserPreference();
+    User usr = await up.getUser();
+    print(usr.toJson()['firstName']);
+    setState(() {
+      user = usr;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,7 +116,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             color: Color(0xFF10151A)
                           ),
                           ),
-                          subtitle: Text('••• ••••  7767',
+                          subtitle: Text('${this.user?.phoneNumber}',
                           style: TextStyle(
                             fontSize: 14.0,
                             fontWeight: FontWeight.w400,
@@ -144,7 +164,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             color: Color(0xFF10151A)
                           ),
                           ),
-                          subtitle: Text('•••••••vid@gmail.com',
+                          subtitle: Text('${this.user?.email}',
                           style: TextStyle(
                             fontSize: 14.0,
                             fontWeight: FontWeight.w400,

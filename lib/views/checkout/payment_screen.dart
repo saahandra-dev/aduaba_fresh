@@ -8,7 +8,7 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
-  int _index = 0;
+
 
   @override
   Widget build(BuildContext context) {

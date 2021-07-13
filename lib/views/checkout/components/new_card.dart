@@ -1,7 +1,7 @@
 import 'package:aduaba_fresh/views/checkout/components/add_new_card.dart';
 import 'package:aduaba_fresh/views/discover/discover_screen.dart';
 import 'package:flutter/material.dart';
-
+import 'package:aduaba_fresh/views/homepage.dart';
 
 
 class NewCard extends StatefulWidget {
@@ -15,7 +15,7 @@ class _NewCardState extends State<NewCard> {
 
     int _currentIndex = 2;
     final List<Widget> _children = [
-    //HomeScreen(),
+    HomePage(),
     DiscoverScreen(),
     NewCard()
     ];

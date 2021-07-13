@@ -6,26 +6,31 @@ class User {
   String imageUrl;
   String phoneNumber;
 
-  User({
+  User(
     this.email, 
     this.password, 
     this.firstName, 
     this.lastName,
     this.imageUrl,
     this.phoneNumber
-  });
+  );
 
-  factory User.fromJson(Map<String, dynamic> responseData) {
-    return User(
-      email: responseData['email'],
-      password: responseData['password'],
-      firstName: responseData['firstName'],
-      lastName: responseData['lastName'],
-      imageUrl: responseData['imageUrl'],
-      phoneNumber: responseData['phoneNumber']
+  User.fromJson(Map<String, dynamic> responseData) 
+    : email = responseData['email'],
+      password =responseData['password'],
+      firstName = responseData['firstName'],
+      lastName = responseData['lastName'],
+      imageUrl = responseData['imageUrl'],
+      phoneNumber = responseData['phoneNumber'];
+  
 
-    );
-  }
+  Map<String, dynamic> toJson() => {
+    'firstName': this.firstName,
+    'lastName': this.lastName,
+    'email': this.email,
+    'phoneNumber': this.phoneNumber,
+    'imageUrl': this.imageUrl,
+  };
 
 }
 

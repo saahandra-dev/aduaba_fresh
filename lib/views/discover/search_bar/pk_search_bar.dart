@@ -1,7 +1,9 @@
 library flappy_search_bar;
 
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:aduaba_fresh/models/product.dart';
 import 'package:aduaba_fresh/views/details_screen.dart';
 import 'package:aduaba_fresh/views/discover/search_bar/option_card.dart';
 import 'package:aduaba_fresh/views/discover/search_bar/scaled_tile.dart';
@@ -9,7 +11,8 @@ import 'package:aduaba_fresh/views/discover/search_bar/search_bar_style.dart';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:aduaba_fresh/models/products_marks.dart';
+
+import 'package:http/http.dart' as http;
 
 
 
@@ -229,6 +232,9 @@ class SearchBar<T> extends StatefulWidget {
 
   final EdgeInsetsGeometry optionHeaderPadding;
 
+  final Product product;
+
+
   /// Set a padding on the list
   final EdgeInsetsGeometry listPadding;
 
@@ -269,6 +275,7 @@ class SearchBar<T> extends StatefulWidget {
     this.searchBarPadding = const EdgeInsets.all(0),
     this.headerPadding = const EdgeInsets.all(0),
     this.optionHeaderPadding = const EdgeInsets.all(0),
+    this.product,
   }) : super(key: key);
 
   @override
@@ -277,6 +284,25 @@ class SearchBar<T> extends StatefulWidget {
 
 class _SearchBarState<T> extends State<SearchBar<T>>
     with TickerProviderStateMixin, _ControllerListener<T> {
+
+      List<Product> product = [];
+
+  void getProduct() async {
+    var response = await http.get(Uri.parse("https://teamaduaba.azurewebsites.net/getProducts"));
+
+    if (response.statusCode == 200) {
+      List<dynamic> decoded = json.decode(response.body);
+      List<Product> allproduct = decoded.map((e) => Product.fromJson(e)).toList();
+      
+      if (mounted) setState(() { 
+      product = allproduct;
+      });
+     
+    // print(response.body);
+    }
+  }
+
+
   bool _loading = false;
   Widget _error;
   final _searchQueryController = TextEditingController();
@@ -424,6 +450,7 @@ class _SearchBarState<T> extends State<SearchBar<T>>
 
   @override
   Widget build(BuildContext context) {
+    getProduct();
     //final widthMax = MediaQuery.of(context).size.width;
     return ListView(
       children: <Widget>[
@@ -547,7 +574,8 @@ class _SearchBarState<T> extends State<SearchBar<T>>
             ),
           ),
         ),],),),
-         Container(
+         SingleChildScrollView(
+           child: Container(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -565,30 +593,36 @@ class _SearchBarState<T> extends State<SearchBar<T>>
               child: optionHeader(context),
               ),
               Container(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
                 child: ListView.builder(
-                itemCount: ProductsMock.productsList.length,
+                itemCount: product.length,
                 shrinkWrap: true,
                   itemBuilder: ( context, index) => OptionCard(
-                  product: ProductsMock.productsList[index],
+                  product: product[index],
                     press: () => Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => DetailsScreen(
-                          product: ProductsMock.productsList[index],
+                          image: product[index].imageUrl,
+                          name: product[index].name,
+                          description: product[index].shortDescription,
+                          amount: product[index].amount.toString(),
+                          instock: product[index].inStock.toString(),
+                          longDescription: product[index].longDescription,  
                         ),
                       ),
                     ),
                   ),
                 ),                            
-              ),         
+              ),),        
             ],
-          ),
+          ),),
         ),
       ],
     );
   }
 }
-
 
 
 

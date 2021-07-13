@@ -2,16 +2,26 @@ import 'package:aduaba_fresh/models/product.dart';
 import 'package:flutter/material.dart';
 
 
-class DetailsScreen extends StatelessWidget {
 
+class DetailsScreen extends StatefulWidget {
+
+  DetailsScreen({this.image, this.name, this.description, this.amount, this.instock, this.longDescription, this.product});
+  final String image;
+  final String name;
+  final String description;
+  final String amount;
+  final String instock;
+  final String longDescription;
   final Product product;
 
+   @override
+  _DetailsScreenState createState() => _DetailsScreenState();
+}
 
-  DetailsScreen({ this.product });
-
+  class _DetailsScreenState extends State<DetailsScreen> {
   
 
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,11 +40,18 @@ class DetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            ClipRRect(
-              child: Image.asset((product.image),
-                height: 340,
-                fit: BoxFit.cover,
-                alignment: Alignment.topCenter,
+            Container(
+              padding: EdgeInsets.all(0),
+              height: 360,
+              // For  demo we use fixed height  and width
+              // Now we dont need them
+              // height: 180,
+              // width: 160,
+              decoration: BoxDecoration( 
+                image: DecorationImage(
+                  image: NetworkImage(widget.image),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             SizedBox(height: 10),           
@@ -47,7 +64,7 @@ class DetailsScreen extends StatelessWidget {
                     title: Padding(
                       padding: EdgeInsets.fromLTRB(0, 20, 50, 0),
                       child: Text(
-                        product.description,
+                        widget.description,
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                           fontStyle: FontStyle.normal,
@@ -59,7 +76,7 @@ class DetailsScreen extends StatelessWidget {
                     subtitle: Padding(
                       padding: EdgeInsets.only(top: 10.0),
                       child: Text(
-                        product.title,
+                        widget.name,
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
@@ -78,7 +95,7 @@ class DetailsScreen extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.fromLTRB(15, 18, 15, 0),
                     child: Text(
-                      product.details,
+                      widget.longDescription,
                       style: TextStyle(
                         fontWeight: FontWeight.w300,
                         fontStyle: FontStyle.normal,
@@ -108,7 +125,7 @@ class DetailsScreen extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   Text(
-                    "\₦${product.price}",
+                    "\₦${widget.amount}",
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontStyle: FontStyle.normal,
@@ -127,7 +144,10 @@ class DetailsScreen extends StatelessWidget {
                       elevation: 0.0,
                       child: Text(
                         'Add to Cart',
-                        style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 16, fontWeight: FontWeight.w700, fontStyle: FontStyle.normal),
+                        style: TextStyle(
+                          color: Color(0xFFFFFFFF), 
+                          fontSize: 16, 
+                          fontWeight: FontWeight.w700, fontStyle: FontStyle.normal),
                       ),                        
                       onPressed: () {}
                        

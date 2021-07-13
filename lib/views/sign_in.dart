@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:aduaba_fresh/models/user.dart';
+import 'package:aduaba_fresh/utils/user_preference.dart';
 import 'package:aduaba_fresh/views/create_account.dart';
 import 'package:aduaba_fresh/views/forgot_password.dart';
 import 'package:aduaba_fresh/views/homepage.dart';
@@ -22,12 +24,18 @@ class _SignInState extends State<SignIn> {
 
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
+    
+
 
   Future<void> login() async {
   if (passwordController.text.isNotEmpty && emailController.text.isNotEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      duration: Duration(milliseconds: 700),
+      duration: Duration(milliseconds: 800),
       content: Text("Authenticating")));
+    // setState(() {
+    //       _isLoading = true;
+    //     });
+
     var response = await http.post(Uri.parse("https://teamaduaba.azurewebsites.net/login"), 
         body: jsonEncode({
           'email': emailController.text, 
@@ -39,6 +47,8 @@ class _SignInState extends State<SignIn> {
         }
           );
           if(response.statusCode == 200) {
+            User user = User.fromJson(json.decode(response.body));
+            UserPreference.saveUser(user);
             Navigator.pushNamed(context, HomePage.id);
           } else {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid Credentials")));
