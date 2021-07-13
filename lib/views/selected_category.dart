@@ -151,7 +151,9 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                             builder: (context) => Container(
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
-                                child: Column(children: [
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
@@ -162,8 +164,27 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                         color: Color(0xFF3C673D)
                                       ),
                                       ),
-                                      Icon(Icons.close)
+                                      Container(
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Icon(Icons.close)),
+                                      )
                                     ],
+                                  ),
+                                  SizedBox(height: 34.0,),
+                                  SortByWidget(
+                                    text: 'Popularity',
+                                  ),
+                                  SortByWidget(
+                                    text: 'Newest Arrivals',
+                                  ),
+                                  SortByWidget(
+                                    text: 'Prices: Lowest to Highest',
+                                  ),
+                                  SortByWidget(
+                                    text: 'Prices: Highest to Lowest',
                                   ),
                                   Spacer(),
                                   ReusableButtonNoImg(
@@ -201,8 +222,6 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                         ),
                       ],
                     ),
-                    
-                    
                   ],
                 ),
                 SizedBox(height: 21.0,),
@@ -231,7 +250,8 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                 manufacturer: product[index].manufacturer,
                                 description: product[index].shortDescription,
                                 amount: product[index].amount.toString(),
-                                instock: product[index].inStock.toString(),
+                              
+                                
                               ),
                             ],),
                           );
@@ -240,6 +260,28 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                     ),
                   )
       ],),
+    );
+  }
+}
+
+class SortByWidget extends StatelessWidget {
+  const SortByWidget({
+    this.text
+  });
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 52,
+      child: Text(text,
+      style: TextStyle(
+        color: Color(0xFF10151A),
+        fontWeight: FontWeight.w400,
+        fontSize: 17.0
+      ),
+      ),
     );
   }
 }

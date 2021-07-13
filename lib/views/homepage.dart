@@ -107,6 +107,8 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -227,11 +229,32 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: 24.0,),
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, Orders.id);
+                  // Navigator.pushNamed(context, Orders.id);
                 },
-                child: ReusableSearchField(
-                  hintText: 'Search product',
-                ),
+                child: Container(
+                  height: 47.0,
+                  decoration: BoxDecoration(
+                    color: Color(0XFFF7F7F7),
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  child: Row(children: [
+                    SizedBox(width: 16.0,),
+                    Icon(Icons.search,
+                    color: Color(0xFFBABABA),
+                    ),
+                    SizedBox(width: 13.0,),
+                    Text('Search',
+                    style: TextStyle(
+                      color: Color(0xFFBABABA),
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.w400
+                    ),
+                    )
+                  ],),
+                )
+                // ReusableSearchField(
+                //   hintText: 'Search product',
+                // ),
               ),
               SizedBox(height: 32.0,),
 
@@ -287,23 +310,16 @@ class _HomePageState extends State<HomePage> {
                 ),
 
                 SizedBox(height: 16.0,),
-
-                // SingleChildScrollView(
-                //   scrollDirection: Axis.horizontal,
-                //   child: Row(
-                //     children: [
-                //       TodayPromoStack(),
-                //       TodayPromoStack()
-                //     ],
-                //   )
-                //   ),
                   SizedBox(
                     height: 181.0,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
+                      itemCount: product.length,
                       itemBuilder: (context, index) {
-                        return TodayPromoStack();
+                        return TodayPromoStack(
+                          productBrand: product[index].name,
+                        );
                       }
                       ),
                   ),
@@ -326,7 +342,9 @@ class _HomePageState extends State<HomePage> {
                             manufacturer: featuredProduct[index].manufacturer,
                             description: featuredProduct[index].shortDescription,
                             amount: featuredProduct[index].amount.toString(),
-                            instock: featuredProduct[index].inStock.toString(),
+                            productId: featuredProduct[index].id
+                            
+                            // available: featuredProduct[index].isAvailable,
                           ),
                         );
                       }
@@ -354,7 +372,8 @@ class _HomePageState extends State<HomePage> {
                             manufacturer: product[index].manufacturer,
                             description: product[index].shortDescription,
                             amount: product[index].amount.toString(),
-                            instock: product[index].inStock.toString(),
+                            productId: product[index].id
+                          
                           ),
                         );
                       }

@@ -145,7 +145,7 @@ class _CategoriesState extends State<Categories> {
             child: ListView.builder(
               itemCount: category.length,
               itemBuilder: (context, index) {
-                return Padding(
+                return Container(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0,),
                   child: InkWell(
                     onTap: () {
@@ -185,7 +185,7 @@ class _CategoriesState extends State<Categories> {
                                 fontWeight: FontWeight.w700
                               ),
                               ),
-                              Text('234',
+                              Text('',
                               style: TextStyle(
                                 fontSize: 13.0,
                                 fontWeight: FontWeight.w400,

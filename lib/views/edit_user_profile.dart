@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:aduaba_fresh/models/user.dart';
@@ -9,6 +10,7 @@ import 'package:aduaba_fresh/widgets/reusable_box_header.dart';
 import 'package:aduaba_fresh/widgets/form_field_label.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class EditUserProfile extends StatefulWidget {
   const EditUserProfile({ Key key }) : super(key: key);
@@ -19,6 +21,7 @@ class EditUserProfile extends StatefulWidget {
 }
 
 class _EditUserProfileState extends State<EditUserProfile> {
+  final _formKey = GlobalKey<FormState>();
   File _image;
 
  _imgFromCamera() async {
@@ -52,11 +55,43 @@ _imgFromGallery() async {
   getUserFromSP() async {
     UserPreference up = new UserPreference();
     User usr = await up.getUser();
-    print(usr.toJson()['firstName']);
+    // print(usr.toJson()['firstName']);
     setState(() {
       user = usr;
     });
   }
+
+  
+
+    Future<void> updateUserDetails() async {
+      print('work IJN');
+      print(_image);
+    var response = await http.post(Uri.parse("https://teamaduaba.azurewebsites.net/update"), 
+    body: jsonEncode({
+      // 'productId': productId, 
+        "firstName": _firstNameController.text,
+        "lastName": _lastNameController.text,
+        "phoneNumber": _phoneController.text
+      }),
+      headers: {
+      "Content-Type":"application/json"
+    }
+
+      );
+
+      if(response.statusCode == 201) {
+        User user = User.fromJson(json.decode(response.body));
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Added to Wishlist")));
+        print(response.body);
+
+      }print('work IJN');
+    }
+
+
+      TextEditingController _firstNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -158,35 +193,70 @@ _imgFromGallery() async {
                   ],),
                 ),
                 SizedBox(height: 72.0,),
-                TextFormFieldLabel(
-                  text: 'First Name',
-                ),
-                SizedBox(height: 16.0,),
-                ReusableTextFormField(
-                  hintText: '${this.user?.firstName}',
-                ),
-                SizedBox(height: 16.0,),
-                TextFormFieldLabel(
-                  text: 'Last Name',
-                ),
-                SizedBox(height: 16.0,),
-                ReusableTextFormField(
-                  hintText: '${this.user?.lastName}',
-                ),
-                SizedBox(height: 16.0,),
-                TextFormFieldLabel(
-                  text: 'Phone Number',
-                ),
-                SizedBox(height: 16.0,),
-                ReusableTextFormField(
-                  hintText: '${this.user?.phoneNumber}',
-                ),
+
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormFieldLabel(
+                        text: 'First Name',
+                      ),
+                      SizedBox(height: 16.0,),
+                      ReusableTextFormField(
+                        controller: _firstNameController,
+                        hintText: '${this.user?.firstName}',
+                        validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your first name';
+                            }
+                            return null;
+                          },
+                      ),
+                      SizedBox(height: 16.0,),
+                      TextFormFieldLabel(
+                        text: 'Last Name',
+                      ),
+                      SizedBox(height: 16.0,),
+                      ReusableTextFormField(
+                        controller: _lastNameController,
+                        hintText: '${this.user?.lastName}',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your first name';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 16.0,),
+                      TextFormFieldLabel(
+                        text: 'Phone Number',
+                      ),
+                      SizedBox(height: 16.0,),
+                      ReusableTextFormField(
+                        controller: _phoneController,
+                        hintText: '+234 ${this.user?.phoneNumber}',
+                        validator: (value) {
+                          if (value.length != 10)
+                              return 'Mobile Number must be of 10 digit';
+                            else
+                              return null;
+                          }
+                      ),
+                    ],)
+                    )
               ],),
             ),
             ReusableButtonNoImg(
               text: 'Save Changes',
               primary: Color(0xFF3A953C),
-              onpressed: () {},
+              onpressed: () {
+                print(_formKey.currentState.validate());
+                if(_formKey.currentState.validate()) {
+                  
+                  updateUserDetails();
+                }
+              },
             )
           ],
         ),

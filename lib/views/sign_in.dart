@@ -24,12 +24,18 @@ class _SignInState extends State<SignIn> {
 
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
+    
+
 
   Future<void> login() async {
   if (passwordController.text.isNotEmpty && emailController.text.isNotEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      duration: Duration(milliseconds: 700),
+      duration: Duration(milliseconds: 800),
       content: Text("Authenticating")));
+    // setState(() {
+    //       _isLoading = true;
+    //     });
+
     var response = await http.post(Uri.parse("https://teamaduaba.azurewebsites.net/login"), 
         body: jsonEncode({
           'email': emailController.text, 

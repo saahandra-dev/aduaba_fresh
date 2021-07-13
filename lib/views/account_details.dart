@@ -6,7 +6,6 @@ import 'package:aduaba_fresh/views/orders.dart';
 import 'package:aduaba_fresh/views/payment_card.dart';
 import 'package:aduaba_fresh/views/shipping_details.dart';
 import 'package:aduaba_fresh/views/sign_in.dart';
-import 'package:aduaba_fresh/views/splash_screen.dart';
 import 'package:aduaba_fresh/views/wishlist.dart';
 import 'package:aduaba_fresh/widgets/homepage_widgets/user_name.dart';
 import 'package:aduaba_fresh/widgets/reusable_button_no_img.dart';
@@ -35,7 +34,6 @@ class _AccountDetailsState extends State<AccountDetails> {
   getUserFromSP() async {
     UserPreference up = new UserPreference();
     User usr = await up.getUser();
-    print(usr.toJson()['firstName']);
     setState(() {
       user = usr;
     });
@@ -76,8 +74,8 @@ prefs?.clear();
                       height: 60.0,
                       width: 60.0,
                       child: CircleAvatar(
-                        // backgroundColor: Colors.yellow,
-                        child: Image.asset('assets/images/acc_profile.png'),
+                        backgroundColor: Color(0xFF3A953C).withOpacity(0.1),
+                        child: Image.asset('assets/images/person.png'),
                       )
                       ),
                   
@@ -95,17 +93,21 @@ prefs?.clear();
                     ),
                     SizedBox(height: 8.0,),
                     UserContactDetails(
-                      text: '${this.user?.phoneNumber}',
+                      text: '+234 ${this.user?.phoneNumber}',
                     )
                   ],),
                   ],
                 ),
                   // SizedBox(width: 71.0,),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, EditUserProfile.id);
-                    },
-                    child: Image.asset('assets/images/edit_account.png'))
+                  Container(
+                    height: 15.0,
+                    width: 16.0,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, EditUserProfile.id);
+                      },
+                      child: Image.asset('assets/images/edit_account.png')),
+                  )
               ],),
               SizedBox(height: 53.0,),
               UserProfileLink(
@@ -169,31 +171,33 @@ class UserProfileLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: Color(0xFFF5F5F5),
-              width: 1.0,
-              style: BorderStyle.solid
+    return Container(
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: Color(0xFFF5F5F5),
+                width: 1.0,
+                style: BorderStyle.solid
+              )
             )
-          )
-        ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 25.0),
-          child: Row(children: [
-            Image.asset(image),
-            SizedBox(width: 19.0,),
-            Text(text,
-            style: TextStyle(
-              fontSize: 17.0,
-              fontWeight: FontWeight.w400,
-              color: Color(0xFF10151A),
-            ),
-            )
-          ]),
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 25.0),
+            child: Row(children: [
+              Image.asset(image),
+              SizedBox(width: 19.0,),
+              Text(text,
+              style: TextStyle(
+                fontSize: 17.0,
+                fontWeight: FontWeight.w400,
+                color: Color(0xFF10151A),
+              ),
+              )
+            ]),
+          ),
         ),
       ),
     );

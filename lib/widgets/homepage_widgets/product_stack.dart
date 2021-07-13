@@ -1,17 +1,60 @@
+import 'dart:convert';
+
 import 'package:aduaba_fresh/views/details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:favorite_button/favorite_button.dart';
+import 'package:http/http.dart' as http;
 
 class ProductStack extends StatelessWidget {
-  ProductStack({this.image, this.manufacturer, this.description, this.amount, this.instock});
+  ProductStack({this.image, this.manufacturer, this.description, this.amount, this.productId});
   final String image;
   final String manufacturer;
   final String description;
   final String amount;
-  final String instock;
+  final String productId;
+  // final Function onLiked;
+
+
+    Future<void> addToWishList(String productId) async {
+print(productId);
+    var response = await http.post(Uri.parse("https://teamaduaba.azurewebsites.net/AddToWishList"), 
+    body: jsonEncode({
+      'productId': productId, 
+      }),
+      headers: {
+      "Login":"application/json",
+      "Content-Type":"application/json"
+    }
+      );
+      if(response.statusCode == 200) {
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Added to Wishlist")));
+        print(response.body);
+      }
+ 
+}
+Future<void> removeFromWishList(String productId) async {
+print(productId);
+    var response = await http.post(Uri.parse("https://teamaduaba.azurewebsites.net/Remove"), 
+    body: jsonEncode({
+      'wishListItemId': productId, 
+      }),
+      headers: {
+      "Login":"application/json",
+      "Content-Type":"application/json"
+    }
+      );
+      if(response.statusCode == 200) {
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Added to Wishlist")));
+        print(response.body);
+      }
+ 
+}
+
 
   @override
+  
   Widget build(BuildContext context) {
+   
     return Container(
       width: 156.0,
       margin: EdgeInsets.only(right: 16.0),
@@ -65,7 +108,7 @@ class ProductStack extends StatelessWidget {
               ),
               ),
               SizedBox(width: 4.0),
-              Text(instock,
+              Text('In stock',
               style: TextStyle(
                 color: Color(0xFF3A953C),
                 fontSize: 13.0,
@@ -85,11 +128,14 @@ class ProductStack extends StatelessWidget {
                 iconColor: Color(0xFFED111F),
                 iconDisabledColor: Colors.white,
                 iconSize: 30.0,
-                valueChanged: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => DetailsScreen()),
-                  // );
+                valueChanged: (isfavourite) {
+                  // addToWishList(product[index].id);
+
+                  if(isfavourite) {
+                    addToWishList(productId);
+                  } else {
+                    removeFromWishList(productId);
+                  }
                 },
               ),
             )

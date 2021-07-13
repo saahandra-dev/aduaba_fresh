@@ -1,4 +1,5 @@
 class Product {
+  String id;
   String name;
   String categoryId;
   String shortDescription;
@@ -11,9 +12,11 @@ class Product {
   double amount;
   bool bestSelling;
   bool featuredProduct;
+  String isAvailable;
 
   Product(
-      {this.name,
+      this.id,
+      this.name,
       this.categoryId,
       this.shortDescription,
       this.longDescription,
@@ -24,10 +27,13 @@ class Product {
       this.quantity,
       this.amount,
       this.bestSelling,
-      this.featuredProduct});
+      this.featuredProduct,
+      this.isAvailable
+      );
 
   Product.fromJson(Map<String, dynamic> json) {
     name = json['name'];
+    id = json['id'];
     categoryId = json['categoryId'];
     shortDescription = json['shortDescription'];
     longDescription = json['longDescription'];
@@ -39,10 +45,12 @@ class Product {
     amount = json['amount'];
     bestSelling = json['bestSelling'];
     featuredProduct = json['featuredProduct'];
+    isAvailable = json['isAvailable'];
   }
 
   Map<String, dynamic> toJson() => {
     'name': this.name,
+    'id': this.id,
     'categoryId': this.categoryId,
     'shortDescription': this.shortDescription,
     'longDescription': this.longDescription,
@@ -53,6 +61,7 @@ class Product {
     'quantity': this.quantity,
     'amount': this.amount,
     'bestSelling': this.bestSelling,
-    'featuredProduct': this.featuredProduct
+    'featuredProduct': this.featuredProduct,
+    'isAvailable': this.isAvailable
   };
 }

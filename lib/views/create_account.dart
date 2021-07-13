@@ -19,7 +19,10 @@ class CreateAccount extends StatefulWidget {
 }
 
 class _CreateAccountState extends State<CreateAccount> {
+  bool _showPassword = false;
+  bool _confirmPassword = false;
 
+  // final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController _firstNameController = TextEditingController();
@@ -29,14 +32,16 @@ class _CreateAccountState extends State<CreateAccount> {
   TextEditingController _confirmpasswordController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
 
+ 
+
   Future<void> register() async {
     if (_passwordController.text == _confirmpasswordController.text 
         && _passwordController.text.isNotEmpty && _emailController.text.isNotEmpty
         && _firstNameController.text.isNotEmpty && _lastNameController.text.isNotEmpty && _phoneController.text.isNotEmpty) {
-
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        duration: Duration(seconds: 1),
-        content: Text("Authenticating")));
+            duration: Duration(milliseconds: 800),
+            content: Text("Authenticating")));
+      
       var response = await http.post(Uri.parse("https://teamaduaba.azurewebsites.net/Register"), 
           body: jsonEncode({
             "email": _emailController.text,
@@ -50,6 +55,7 @@ class _CreateAccountState extends State<CreateAccount> {
             "Content-Type":"application/json"
           }
             );
+           
             if(response.statusCode == 200) {
               Map<String, dynamic> decoded = json.decode(response.body);
               User user = User.fromJson(decoded);
@@ -68,16 +74,17 @@ class _CreateAccountState extends State<CreateAccount> {
     }
   }
 
-  // @override 
-  // void initState() {
-  //   super.initState();
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    super.dispose();
+  }
 
-  //   _firstNameController.text = UserPreference.getUserFirstName() ?? '';
-  // }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // key: _scaffoldKey,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -231,10 +238,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           text: 'Password',
                         ),
                         SizedBox(height: 16.0,),
-                        ReusableTextFormField(
-                          keyboardType: TextInputType.emailAddress,
-                          controller: _passwordController,
-                          hintText: 'Enter password',
+                        TextFormField(
                           validator:  (value) {
 
                           String  pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
@@ -245,31 +249,91 @@ class _CreateAccountState extends State<CreateAccount> {
                           }
                             if (!regExp.hasMatch(value)) {
                               return 'must contain a special character, lower and uppercase \nand not be less than 8 characters';
-                            }
-                          }
+                            } return null;
+                          },
+                          keyboardType: TextInputType.emailAddress,
+                          controller: _passwordController,
+                          obscureText: !_showPassword,
+                          decoration: InputDecoration(
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _showPassword = !_showPassword;
+                                });
+                              },
+                              child: Icon(
+                                _showPassword ? Icons.visibility : Icons.visibility_off
+                              ),
+                            ),
+                            
+                            hintText: 'Enter Password',
+                            hintStyle: TextStyle(
+                              color: Color(0XFFBABABA),
+                              fontSize: 15.0,
+                            ),
+                            fillColor: Color(0XFFF7F7F7),
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                              borderSide: BorderSide.none,
+                          ),
+                        )
                         ),
+                      
+                        
                         SizedBox(height: 24.0,),
                         TextFormFieldLabel(
                           text: 'Confirm Password',
                         ),
                         SizedBox(height: 16.0,),
-                        ReusableTextFormField(
-                          controller: _confirmpasswordController,
-                          hintText: 'Enter password',
+
+                        TextFormField(
                           validator: (value) {
                             if(_passwordController.text == value){
                               return null;
                             } else {
                               return 'Password does not match';
                             }
-                            
                           },
-                        ),
+                          controller: _confirmpasswordController,
+                          obscureText: !_confirmPassword,
+                          decoration: InputDecoration(
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _confirmPassword = !_confirmPassword;
+                                });
+                              },
+                              child: Icon(
+                                _confirmPassword ? Icons.visibility : Icons.visibility_off
+                              ),
+                            ),
+                            hintText: 'Enter Password',
+                            hintStyle: TextStyle(
+                              color: Color(0XFFBABABA),
+                              fontSize: 15.0,
+                            ),
+                            fillColor: Color(0XFFF7F7F7),
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                              borderSide: BorderSide.none,
+                          ),
+                        )),
+
                         SizedBox(height: 24.0,),
                         ReusableButtonNoImg(
                           onpressed: () {
                             // await UserPreference.setUserFirstName(firstName);
-                            
+                      //       _scaffoldKey.currentState.showSnackBar(
+                      // new SnackBar(duration: new Duration(seconds: 4), content:
+                      // new Row(
+                      //   children: <Widget>[
+                      //     new CircularProgressIndicator(),
+                      //     new Text("  Signing-In...")
+                      //   ],
+                      // ),
+                      // ));
                             if(_formKey.currentState.validate()) {
                               register();
                             }
@@ -278,10 +342,9 @@ class _CreateAccountState extends State<CreateAccount> {
                           text: 'Create Account',
                           primary: Color(0XFF3A953C),
                           fontweight: FontWeight.w700,
-                        ),
+                        )
                       ],
                     )
-                  
                   ),
                   SizedBox(height: 24.0,),
                   Center(
