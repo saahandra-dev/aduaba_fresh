@@ -1,5 +1,4 @@
 // import 'package:flutter/material.dart';
-// import 'package:aduaba_fresh/models/cart_model.dart';
 
 // import 'components/body.dart';
 
@@ -86,3 +85,4 @@
 //     );
 //   }
 // }
+

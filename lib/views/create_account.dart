@@ -60,7 +60,7 @@ class _CreateAccountState extends State<CreateAccount> {
               Map<String, dynamic> decoded = json.decode(response.body);
               User user = User.fromJson(decoded);
               UserPreference.saveUser(user);
-              Navigator.pushNamed(context, HomePage.id);
+              Navigator.pushNamed(context, SignIn.id);
             } else {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid Credentials")));
               // print(response.body);
@@ -348,27 +348,29 @@ class _CreateAccountState extends State<CreateAccount> {
                   ),
                   SizedBox(height: 24.0,),
                   Center(
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, SignIn.id);
-                      },
-                      child: RichText(
-                        text: TextSpan(
-                          text: 'Have an account?', 
-                          style: TextStyle(
-                            color: Colors.black, 
-                            fontSize: 14,
-                            // fontWeight: FontWeight.w700
-                            ),
-                          children: <TextSpan>[
-                            TextSpan(text: ' Sign in', 
+                    child: Container(
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, SignIn.id);
+                        },
+                        child: RichText(
+                          text: TextSpan(
+                            text: 'Have an account?', 
                             style: TextStyle(
-                              color: Colors.green, 
+                              color: Colors.black, 
                               fontSize: 14,
-                              fontWeight: FontWeight.w700
+                              // fontWeight: FontWeight.w700
+                              ),
+                            children: <TextSpan>[
+                              TextSpan(text: ' Sign in', 
+                              style: TextStyle(
+                                color: Colors.green, 
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700
+                                )
                               )
-                            )
-                          ] )
+                            ] )
+                        ),
                       ),
                     )
                   ),

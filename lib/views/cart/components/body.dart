@@ -34,8 +34,8 @@
 //                     Checkbox(
 //                 materialTapTargetSize:
 //                 MaterialTapTargetSize.shrinkWrap,
-//                 activeColor: Color(0xFFE75A21),
-//                 checkColor: Color(0xFFFFFFFF),
+//                 activeColor: Colors.blue,
+//                 checkColor: Colors.white,
 //                 value: true,
 //                 tristate: false,
 //                 onChanged: (value) {},

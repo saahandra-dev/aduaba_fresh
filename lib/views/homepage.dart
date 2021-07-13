@@ -5,6 +5,7 @@ import 'package:aduaba_fresh/utils/user_preference.dart';
 import 'package:aduaba_fresh/views/account_details.dart';
 import 'package:aduaba_fresh/views/categories.dart';
 import 'package:aduaba_fresh/models/user.dart';
+import 'package:aduaba_fresh/views/discover/discover_screen.dart';
 import 'package:aduaba_fresh/views/orders.dart';
 import 'package:aduaba_fresh/views/selected_category.dart';
 import 'package:aduaba_fresh/widgets/homepage_widgets/drawer.dart';
@@ -176,10 +177,10 @@ class _HomePageState extends State<HomePage> {
               label: 'search',
               icon: InkWell(
                 onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => DiscoverScreen()),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DiscoverScreen()),
+                  );
                 },
                 child: Icon(Icons.search))
               ),

@@ -1,3 +1,4 @@
+
 class Product {
   String id;
   String name;
